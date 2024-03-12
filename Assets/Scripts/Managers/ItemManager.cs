@@ -30,7 +30,6 @@ public class ItemManager : MonoBehaviour
         newItem.maxAmount = itemToAssign.maxAmount;
         newItem.rarety = itemToAssign.rarety;
         newItem.weight = itemToAssign.weight;
-        newItem.itemType = itemToAssign.itemType;
         newItem.icon = itemToAssign.icon;
         return newItem;
     }
@@ -45,7 +44,6 @@ public class ItemManager : MonoBehaviour
         newItem.maxAmount = itemToAssign.maxAmount;
         newItem.rarety = itemToAssign.rarety;
         newItem.weight = itemToAssign.weight;
-        newItem.itemType = itemToAssign.itemType;
         newItem.icon = itemToAssign.icon;
         return newItem;
     }

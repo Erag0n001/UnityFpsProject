@@ -32,8 +32,6 @@ public class AggressiveCreatures : MonoBehaviour
         {
             Wander();
         }
-
-
     }
 
     void Attack()

@@ -26,5 +26,4 @@ public static class MainManager
     public static CharacterMovement playerMovement;
     public static bool isPlayerAlive;
     public static GameObject playerInventory;
-    public static PlayerManager playerManager;
 }
