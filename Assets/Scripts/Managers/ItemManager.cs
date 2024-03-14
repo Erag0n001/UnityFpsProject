@@ -13,6 +13,7 @@ public class ItemManager : MonoBehaviour
         objectList = Resources.LoadAll<Item>("Prefab/Items");
         MainManager.itemList = objectList;
         emptyItem = Resources.Load<Item>("Prefab/Items/Empty");
+        NetworkManager.Main();
     }
 
     public Item FetchItem()

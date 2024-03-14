@@ -17,7 +17,7 @@ public static class MainManager
 
     [Header("Entities")]
     public static GameObject[] entityCreatureList;
-   
+
     [Header("Player")]
     public static GameObject latestPlayerDeadBody;
     public static GameObject playerPrefab;
