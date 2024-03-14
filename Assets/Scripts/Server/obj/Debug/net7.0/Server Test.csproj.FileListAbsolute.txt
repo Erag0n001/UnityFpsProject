@@ -1,0 +1,15 @@
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.csproj.AssemblyReference.cache
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.GeneratedMSBuildEditorConfig.editorconfig
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.AssemblyInfoInputs.cache
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.AssemblyInfo.cs
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.csproj.CoreCompileInputs.cache
+E:\Visual Studio Projects\Server Test\Server Test\bin\Debug\net7.0\Server Test.exe
+E:\Visual Studio Projects\Server Test\Server Test\bin\Debug\net7.0\Server Test.deps.json
+E:\Visual Studio Projects\Server Test\Server Test\bin\Debug\net7.0\Server Test.runtimeconfig.json
+E:\Visual Studio Projects\Server Test\Server Test\bin\Debug\net7.0\Server Test.dll
+E:\Visual Studio Projects\Server Test\Server Test\bin\Debug\net7.0\Server Test.pdb
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.dll
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\refint\Server Test.dll
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.pdb
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\Server Test.genruntimeconfig.cache
+E:\Visual Studio Projects\Server Test\Server Test\obj\Debug\net7.0\ref\Server Test.dll
