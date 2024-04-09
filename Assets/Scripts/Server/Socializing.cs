@@ -1,80 +1,77 @@
 ﻿using System.Net.Sockets;
+using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
+using System;
 
-public class Socializing
+namespace Server
 {
-    public TcpClient connection;
-    public NetworkStream networkStream;
-
-    public StreamWriter streamWriter;
-    public StreamReader streamReader;
-
-    public bool shouldClose;
-    public Socializing(TcpClient connection)
+public class Socializing
     {
-        this.connection = connection;
-        networkStream = connection.GetStream();
-        streamWriter = new StreamWriter(networkStream);
-        streamReader = new StreamReader(networkStream);
-        Task.Run(delegate { Listen(); });
-        Task.Run(delegate { Send(); });
-        Task.Run(delegate { CheckConnection(); });
-    }
-    public void Listen()
-    {
-        try
+        public TcpClient connection;
+        public NetworkStream networkStream;
+
+        public bool shouldClose;
+
+        public StreamWriter streamWriter;
+        public StreamReader streamReader;
+public void Listen()
         {
-            while (true)
+            try
             {
-                Thread.Sleep(1);
-                string data = streamReader.ReadLine();
-                if (string.IsNullOrEmpty(data)) { continue; }
-                else
+                while (true)
                 {
-                    Console.WriteLine(data);
-                    shouldClose = false;
+                    Thread.Sleep(1);
+                    string data = streamReader.ReadLine();
+                    if (string.IsNullOrEmpty(data)) { continue; }
+                    else
+                    {
+                        Console.WriteLine(data);
+                        shouldClose = false;
+                    }
                 }
-            }
-        } catch(Exception ex) { Console.WriteLine(ex); }
-        KillConnection();
-    }
-    public void Send()
-    {
-        try
+            } catch(Exception ex) { Console.WriteLine(ex); }
+            KillConnection();
+        }
+        public void Send()
         {
-            while (true)
+            try
             {
-                Thread.Sleep(1);
-                string data = "test";
-                streamWriter.WriteLine(data);
-                streamWriter.Flush();
-            }
-        } catch (Exception ex) { Console.WriteLine(ex); }
-        KillConnection();
-    }
+                while (true)
+                {
+                    Thread.Sleep(1);
+                    string data = "test";
+                    streamWriter.WriteLine(data);
+                    streamWriter.Flush();
+                }
+            } catch (Exception ex) { Console.WriteLine(ex); }
+            KillConnection();
+        }
 
-    public void CheckConnection()
-    {
-        try
+        public void CheckConnection()
         {
-            while (true)
+            try
             {
-                Thread.Sleep(15000);
-                if (shouldClose)
+                while (true)
                 {
-                    break;
+                    Thread.Sleep(15000);
+                    if (shouldClose)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        shouldClose = true;
+                    }
                 }
-                else
-                {
-                    shouldClose = true;
-                }
-            }
-        } catch(Exception ex) { Console.WriteLine(ex); }
-        KillConnection();
-    }
+            } catch(Exception ex) { Console.WriteLine(ex); }
+            KillConnection();
+        }
 
-    public void KillConnection()
-    {
-        connection.Close();
-        connection.Dispose();
+        public void KillConnection()
+        {
+            connection.Close();
+            connection.Dispose();
+        }
     }
 }
