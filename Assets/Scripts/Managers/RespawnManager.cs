@@ -65,8 +65,20 @@ public class RespawnManager : MonoBehaviour
         selectedNumber = Random.Range(0, aggressiveList.Length);
         selectedCreature = aggressiveList[selectedNumber];
         selectedCreature = Object.Instantiate(selectedCreature, selectedPad.transform.position, Quaternion.identity, aliveList.transform);
+        EntitySizeRandomizer(selectedCreature);
     }
     
+    void EntitySizeRandomizer( GameObject selectedCreature)
+    {
+        float sizeMultiplier = Random.Range(selectedCreature.GetComponent<StatTemplate>().stats.minSize,selectedCreature.GetComponent<StatTemplate>().stats.maxSize);
+        StatTemplate statTemplate = selectedCreature.GetComponent<StatTemplate>();
+        statTemplate.stats.hitPoint *= sizeMultiplier;
+        statTemplate.stats.damage *= sizeMultiplier;
+        statTemplate.stats.agroRange *= sizeMultiplier;
+        selectedCreature.GetComponentInChildren<SphereCollider>().radius = statTemplate.stats.agroRange;
+        selectedCreature.GetComponent<NavMeshAgent>().speed *= sizeMultiplier;
+        selectedCreature.transform.localScale *= sizeMultiplier;
+    }
     void playerRespawn()
     {
         MainManager.alivePlayer = Object.Instantiate(playerPrefab,playerRespawnPads[Random.Range(0, playerRespawnPads.Length)].transform.position,Quaternion.identity, aliveList.transform);

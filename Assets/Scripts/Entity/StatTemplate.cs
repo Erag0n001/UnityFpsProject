@@ -10,6 +10,8 @@ public class StatTemplate : MonoBehaviour
         public float damage;
         public float agroRange;
         public int enemyQuality;
+        public float minSize;
+        public float maxSize;
         [NonSerialized] public float immunityFrames;
     }
     private GameObject enemy;

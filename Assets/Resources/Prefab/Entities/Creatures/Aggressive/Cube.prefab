@@ -158,6 +158,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -219,8 +221,10 @@ MonoBehaviour:
   stats:
     hitPoint: 25
     damage: 3
-    knockback: 3
     agroRange: 3
+    enemyQuality: 0
+    minSize: 0.8
+    maxSize: 1.2
 --- !u!195 &8025247457020830765
 NavMeshAgent:
   m_ObjectHideFlags: 0
