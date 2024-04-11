@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4332349303713770902}
   - component: {fileID: 8211939053285213383}
-  - component: {fileID: 3216603146319665691}
   - component: {fileID: 3108603312272362657}
+  - component: {fileID: 4208400015039880974}
   m_Layer: 0
   m_Name: AgroRange
   m_TagString: Untagged
@@ -55,19 +55,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 3
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3216603146319665691
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158509387894901525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8c733dd1cbe92a40b4b3f6492a45fd4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pathFinding: {fileID: 8025247457020830765}
 --- !u!54 &3108603312272362657
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -95,6 +82,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4208400015039880974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158509387894901525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bad855931e08b2d54a4e32c3b552afdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7543606432201911237
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,9 +106,9 @@ GameObject:
   - component: {fileID: 3754647657752548451}
   - component: {fileID: 8663824729073851897}
   - component: {fileID: 4739618910684701406}
-  - component: {fileID: 4504981963039208902}
   - component: {fileID: 8025247457020830765}
   - component: {fileID: 9151750831194248839}
+  - component: {fileID: -3096496129228536670}
   m_Layer: 7
   m_Name: Cube
   m_TagString: Entity
@@ -200,31 +199,12 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4504981963039208902
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7543606432201911237}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 783c8b95fb78bee4d8dba64c1682ec88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stats:
-    hitPoint: 25
-    damage: 3
-    agroRange: 3
-    enemyQuality: 0
-    minSize: 0.8
-    maxSize: 1.2
 --- !u!195 &8025247457020830765
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -274,3 +254,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-3096496129228536670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7543606432201911237}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 537bf7221f962b8eda599cc3f41cc6bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stats:
+    hitPoint: 25
+    damage: 3
+    agroRange: 3
+    enemyQuality: 0
+    minSize: 0.8
+    maxSize: 1.2
+  aIType: 3
+  pathFinding: {fileID: 8025247457020830765}
+  aggressive: 0

@@ -70,8 +70,8 @@ public class RespawnManager : MonoBehaviour
     
     void EntitySizeRandomizer( GameObject selectedCreature)
     {
-        float sizeMultiplier = Random.Range(selectedCreature.GetComponent<StatTemplate>().stats.minSize,selectedCreature.GetComponent<StatTemplate>().stats.maxSize);
-        StatTemplate statTemplate = selectedCreature.GetComponent<StatTemplate>();
+        float sizeMultiplier = Random.Range(selectedCreature.GetComponent<CreatureAI>().stats.minSize,selectedCreature.GetComponent<CreatureAI>().stats.maxSize);
+        CreatureAI statTemplate = selectedCreature.GetComponent<CreatureAI>();
         statTemplate.stats.hitPoint *= sizeMultiplier;
         statTemplate.stats.damage *= sizeMultiplier;
         statTemplate.stats.agroRange *= sizeMultiplier;

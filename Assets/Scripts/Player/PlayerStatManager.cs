@@ -23,13 +23,13 @@ public class PlayerStatManager : MonoBehaviour
         [NonSerialized] public float immunityFrames;
     }
     public Stats stats;
-    private StatTemplate.Stats enemyStats;
+    private CreatureAI.Stats enemyStats;
     private GameObject enemy;
     private GameObject deadPlayerPrebad;
 
     private Vector3 knockbackVector;
     private CharacterController controller;
-    private StatTemplate statTemplate;
+    private CreatureAI statTemplate;
     private GameObject deadList;
 
     private void Awake()
@@ -57,12 +57,11 @@ public class PlayerStatManager : MonoBehaviour
     {
         if (enemy.tag == "Entity" && stats.immunityFrames <= 0)
         {
-            statTemplate = enemy.GetComponent<StatTemplate>();
+            statTemplate = enemy.GetComponent<CreatureAI>();
             enemyStats = statTemplate.stats;
             if (enemyStats.damage != 0)
             {
                 ThreadingMisc.Threader(delegate { this.AddHP(enemyStats.damage * -1); });
-                SetImmunityFrames(0.1f);
             }
         }
     }
@@ -80,7 +79,7 @@ public class PlayerStatManager : MonoBehaviour
     {
         if (stats.immunityFrames > 0)
         {
-            SetImmunityFrames(stats.immunityFrames - 1 * Time.deltaTime);
+            stats.immunityFrames -= 1 * Time.deltaTime;
         }
     }
 
@@ -91,8 +90,15 @@ public class PlayerStatManager : MonoBehaviour
             KillPlayer();
         }
     }
-    public void AddHP(float modifier) { stats.hitPoint += modifier; }
+    public void AddHP(float modifier) 
+    { 
+        stats.hitPoint += modifier; 
+        if(modifier < 0)
+        {
+            stats.immunityFrames += modifier * 0.5f * -1;
+        }
+        
+    }
     public void AddStamina(float modifier){ stats.stamina += modifier; }
     public void SetMovemendSpeed(float modifier) { stats.movementSpeed = modifier; }
-    public void SetImmunityFrames(float modifier) { stats.immunityFrames = modifier; }
 }
