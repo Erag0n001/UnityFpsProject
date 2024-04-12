@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,13 +14,15 @@ public class CreatureAI : MonoBehaviour
         public int enemyQuality;
         public float minSize;
         public float maxSize;
+        public float baseSpeed;
+        public float sprintingSpeed;
         [NonSerialized] public float immunityFrames;
     }
     public Stats stats;
 
     [Header("AI")]
-    [SerializeField] AIType aIType;
-    private enum AIType {PassiveFlee, Passive, Neutral, Aggressive};
+    [SerializeField] public AIType aIType;
+    public enum AIType {PassiveFlee, Passive, Neutral, Aggressive};
     private bool hit;
     public NavMeshAgent pathFinding; 
     GameObject attacker;
@@ -33,10 +36,11 @@ public class CreatureAI : MonoBehaviour
     private bool fleeing;  
 
     [Header("Aggressive")]
-    public bool aggressive;
+    private bool aggressive;
     private SphereCollider agroRangeCollider;
     void Start()
     {
+        pathFinding.speed = stats.baseSpeed;
         if(aIType == AIType.Aggressive)
         {
             AgroRange();
@@ -62,7 +66,6 @@ public class CreatureAI : MonoBehaviour
             wandering = true;
         }
         //Check is creature is dead
-        StatChecks();
         //Wanders creature around
         Wander();
         if(aggressive)
@@ -73,6 +76,7 @@ public class CreatureAI : MonoBehaviour
         {
             Flee();
         }
+        StatChecks();
     }
 
     public void HitCheck()
@@ -83,12 +87,15 @@ public class CreatureAI : MonoBehaviour
             {
                 case AIType.PassiveFlee:
                 fleeing = true;
+                pathFinding.speed = stats.sprintingSpeed;
                 break;
                 case AIType.Neutral:
                 aggressive = true;
+                pathFinding.speed = stats.sprintingSpeed;
                 break;
                 case AIType.Aggressive:
                 aggressive = true;
+                pathFinding.speed = stats.sprintingSpeed;
                 break;
             }
         }
@@ -113,7 +120,7 @@ public class CreatureAI : MonoBehaviour
         {
             hit = true;
             this.attacker = attacker;
-            stats.immunityFrames += modifier * 0.5f * -1;
+            stats.immunityFrames += modifier * 0.1f * -1;
         }
     }
 
@@ -130,45 +137,51 @@ public class CreatureAI : MonoBehaviour
     //Passive
     void Flee()
     {
-        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 25)
+        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 12)
         {
             fleeing = false;
             wandering = true;
+            pathFinding.speed = stats.baseSpeed;
         } else
         {
             Vector3 targetPos = new Vector3();
-            targetPos -= attacker.transform.position;
+            gameObject.transform.forward = attacker.transform.forward;
+            targetPos = gameObject.transform.position + gameObject.transform.forward * 5;
+            print(targetPos);
             pathFinding.SetDestination(targetPos);
         }
     }
     //Aggressive
     void Attack()
     {
-        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 25)
+        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 12)
         {
             aggressive = false;
             wandering = true;
+            pathFinding.speed = stats.baseSpeed;
         } else
         {
+            if(pathFinding)
             pathFinding.SetDestination(attacker.transform.position);
         }
     }
 
-    public void SetAgro(Collider other)
+    public void SetAgro(GameObject enemyObject)
     {
-        if(other.gameObject != gameObject)
+        if(enemyObject != gameObject)
         {
             if(aIType == AIType.Aggressive)
             {
-                if (other.gameObject.tag == "Player" || other.gameObject.tag == "Entity")
+                if (enemyObject.tag == "Player" || enemyObject.tag == "Entity")
                 {
                     aggressive = true;
-                    attacker = other.gameObject;
+                    attacker = enemyObject;
                     wandering = false;
                 }
             }
         }
     }
+    //Damage detection
     void OnTriggerStay(Collider other)
     {
         DamageCheck(other);
@@ -192,6 +205,5 @@ public class CreatureAI : MonoBehaviour
             enemyStats = attacker.GetComponent<CreatureAI>().stats;
             AddHP(enemyStats.damage * -1,attacker);
         }
-        StatChecks();
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -7,9 +9,7 @@ using UnityEngine.Rendering;
 
 public class RespawnManager : MonoBehaviour
 {
-    private GameObject[] passiveList;
-    private GameObject[] neutralList;
-    private GameObject[] aggressiveList;
+    [Serialize]private List <GameObject> creatureList = new List<GameObject>();
     private GameObject playerPrefab;
     private GameObject[] entityRespawnPad;
     private GameObject[] playerRespawnPads;
@@ -25,9 +25,12 @@ public class RespawnManager : MonoBehaviour
     {
         MainManager.respawnManager = this;
         
-        aggressiveList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Aggressive");
-        neutralList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Neutral");
-        passiveList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Passive");
+        List<GameObject> aggressiveList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Aggressive").ToList();
+        List<GameObject> neutralList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Neutral").ToList();
+        List<GameObject> passiveList = Resources.LoadAll<GameObject>("Prefab/Entities/Creatures/Passive").ToList();
+        creatureList.AddRange(aggressiveList);
+        creatureList.AddRange(neutralList);
+        creatureList.AddRange(passiveList);
         playerPrefab = Resources.Load<GameObject>("Prefab/Entities/Player/Player");
     }
 
@@ -62,20 +65,25 @@ public class RespawnManager : MonoBehaviour
     {
         selectedNumber = Random.Range(0, entityRespawnPad.Length);
         selectedPad = entityRespawnPad[selectedNumber];
-        selectedNumber = Random.Range(0, aggressiveList.Length);
-        selectedCreature = aggressiveList[selectedNumber];
+        selectedNumber = Random.Range(0, creatureList.Count);
+        selectedCreature = creatureList[selectedNumber];
         selectedCreature = Object.Instantiate(selectedCreature, selectedPad.transform.position, Quaternion.identity, aliveList.transform);
         EntitySizeRandomizer(selectedCreature);
     }
     
     void EntitySizeRandomizer( GameObject selectedCreature)
     {
-        float sizeMultiplier = Random.Range(selectedCreature.GetComponent<CreatureAI>().stats.minSize,selectedCreature.GetComponent<CreatureAI>().stats.maxSize);
+        CreatureAI creatureAI;
+        creatureAI = selectedCreature.GetComponent<CreatureAI>();
+        float sizeMultiplier = Random.Range(creatureAI.stats.minSize,creatureAI.stats.maxSize);
         CreatureAI statTemplate = selectedCreature.GetComponent<CreatureAI>();
         statTemplate.stats.hitPoint *= sizeMultiplier;
         statTemplate.stats.damage *= sizeMultiplier;
-        statTemplate.stats.agroRange *= sizeMultiplier;
-        selectedCreature.GetComponentInChildren<SphereCollider>().radius = statTemplate.stats.agroRange;
+        if(creatureAI.aIType == CreatureAI.AIType.Aggressive)
+        {
+            statTemplate.stats.agroRange *= sizeMultiplier;
+            selectedCreature.GetComponentInChildren<SphereCollider>().radius = statTemplate.stats.agroRange;
+        }
         selectedCreature.GetComponent<NavMeshAgent>().speed *= sizeMultiplier;
         selectedCreature.transform.localScale *= sizeMultiplier;
     }
