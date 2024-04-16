@@ -204,7 +204,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1.1, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &8025247457020830765
 NavMeshAgent:
@@ -222,7 +222,7 @@ NavMeshAgent:
   m_AngularSpeed: 120
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 1.0000001
   m_BaseOffset: 0.50000006
@@ -270,7 +270,7 @@ MonoBehaviour:
   stats:
     hitPoint: 25
     damage: 3
-    agroRange: 3
+    agroRange: 10
     enemyQuality: 0
     minSize: 0.8
     maxSize: 1.2
@@ -278,3 +278,4 @@ MonoBehaviour:
     sprintingSpeed: 4
   aIType: 3
   pathFinding: {fileID: 8025247457020830765}
+  attacker: {fileID: 0}

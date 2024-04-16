@@ -14,13 +14,17 @@ public class AgroRange : MonoBehaviour
     
     private void OnTriggerStay(Collider other)
     {
-        if(!enemyInRange.Contains(other.gameObject))
+        if(other.gameObject != creatureAI.gameObject)
         {
-            if(other.gameObject.CompareTag("Entity") || other.gameObject.CompareTag("Player"))
+            if(!enemyInRange.Contains(other.gameObject))
             {
-                enemyInRange.Add(other.gameObject);
-            }   
+                if(other.gameObject.CompareTag("Entity") || other.gameObject.CompareTag("Player"))
+                {
+                    enemyInRange.Add(other.gameObject);
+                }   
+            }
         }
+
     }
 
     void Update()

@@ -10,7 +10,7 @@ public class Item : ScriptableObject
     public string itemName;
     public string description;
 
-    public int amount;
+    public double amount;
     public int maxAmount;
 
     public int rarety;

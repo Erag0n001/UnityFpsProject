@@ -33,5 +33,6 @@ public class CameraControl : MonoBehaviour
         oldMousePX = Mathf.Clamp(oldMousePX, -90, 90);
         head.transform.rotation = Quaternion.Euler(oldMousePX, oldMousePY, 0);
         character.transform.rotation = Quaternion.Euler(0, oldMousePY, 0);
+        MainManager.PlayerRot = character.transform.rotation;
     }
 }

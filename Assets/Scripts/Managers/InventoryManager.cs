@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 using System.Threading.Tasks;
 using UnityEngine.Rendering.Universal;
 using static UnityEditor.Progress;
+using Unity.Mathematics;
 
 public class InventoryManager : MonoBehaviour
 {
@@ -23,23 +24,21 @@ public class InventoryManager : MonoBehaviour
         itemStatsList = new List<Item>();
     }
         
-    public async Task<Item> CheckForExistingItem(int itemID)
+    Item CheckForExistingItem(int itemID)
     {
-        return await Task.Run(() => {
-            foreach (Item itemStats in itemStatsList)
+        foreach (Item itemStats in itemStatsList)
+        {
+            if (itemStats.iD == itemID && itemStats.maxAmount != itemStats.amount)
             {
-                if (itemStats.iD == itemID && itemStats.maxAmount != itemStats.amount)
-                {
-                    return itemStats;
-                }
+                return itemStats;
             }
-            return null;
-        });
+        }
+        return null;
     }
 
-    public int AmountOfItemInInventory(int itemID)
+    public double AmountOfItemInInventory(int itemID)
     {
-        int amount = 0;
+        double amount = 0;
         foreach (Item itemStats in itemStatsList)
         {
             if(itemStats.iD == itemID)
@@ -56,20 +55,19 @@ public class InventoryManager : MonoBehaviour
     }
 
     //Remove a single item
-    public async Task<bool> RemoveItem(Item item)
+    public bool RemoveItem(Item item)
     {
-        int amountOfItem = AmountOfItemInInventory(item.iD);
+        double amountOfItem = AmountOfItemInInventory(item.iD);
         if(amountOfItem >= item.amount)
         {
             //Declares a new task and grabs it's value
-            Task<Item> itemTask = this.CheckForExistingItem(item.iD);
-            Item inventoryItem = await itemTask;
+            Item inventoryItem = CheckForExistingItem(item.iD);
             if (inventoryItem.amount - item.amount < 0)
             {
-                int amountToLoop = (int)Mathf.Ceil(item.amount / item.maxAmount);
+                int amountToLoop = (int)Math.Ceiling(item.amount / item.maxAmount);
                 for(int i = 0;amountToLoop >= i; i++)
                 {
-                    int itemLeft = (inventoryItem.amount - item.amount) * -1;
+                    double itemLeft = (inventoryItem.amount - item.amount) * -1;
                     inventoryItem.amount = inventoryItem.maxAmount;
                     RemoveItemEntry(item, itemLeft);
                 }
@@ -98,7 +96,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
     //Remove a slot
-    public int RemoveItemEntry(Item item, int itemLeft)
+    public double RemoveItemEntry(Item item, double itemLeft)
     {
         if (itemLeft !> item.maxAmount)
         {
@@ -115,11 +113,10 @@ public class InventoryManager : MonoBehaviour
     }
 
     //Add single item
-    public async void AddItem(Item item)
+    public void AddItem(Item item)
     {
         //Declares a new task and grabs it's value
-        Task<Item> itemTask = this.CheckForExistingItem(item.iD);
-        Item inventoryItem = await itemTask;
+        Item inventoryItem = CheckForExistingItem(item.iD);
         if (inventoryItem == null)
         {
             item.amount = CreateNewItemEntry(item);
@@ -129,9 +126,10 @@ public class InventoryManager : MonoBehaviour
         {
             item.amount -= inventoryItem.maxAmount - inventoryItem.amount;
             inventoryItem.amount = inventoryItem.maxAmount;
-            int amountToLoop = (int)Mathf.Ceil(item.amount / item.maxAmount);
-            for (int i = 0; amountToLoop >= i; i++)
+            double amountToLoop = Math.Ceiling(item.amount / item.maxAmount);
+            for (int i = 0; amountToLoop > i; i++)
             {
+                print($"Creating new stack, amount left = {amountToLoop}, math = {item.amount / item.maxAmount}");
                 item.amount = CreateNewItemEntry(item);
             }
         }
@@ -149,9 +147,9 @@ public class InventoryManager : MonoBehaviour
         }
     }
     //Create new inventory slot
-    public int CreateNewItemEntry(Item item)
+    public double CreateNewItemEntry(Item item)
     {
-        if(item.amount !< item.maxAmount)
+        if(item.amount <= item.maxAmount)
         {
             itemStatsList.Add(MainManager.itemManager.CreateNewItem(item));
             return 0;
