@@ -137,7 +137,7 @@ public class CreatureAI : MonoBehaviour
     //Passive
     void Flee()
     {
-        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 12)
+        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 30)
         {
             fleeing = false;
             wandering = true;
@@ -161,7 +161,7 @@ public class CreatureAI : MonoBehaviour
     //Aggressive
     void Attack()
     {
-        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 12)
+        if (Vector3.Distance(gameObject.transform.position, attacker.transform.position) > 30)
         {
             aggressive = false;
             wandering = true;
@@ -174,7 +174,6 @@ public class CreatureAI : MonoBehaviour
 
     public void SetAgro(GameObject enemyObject)
     {
-        if(enemyObject != gameObject)
         {
             if(aIType == AIType.Aggressive)
             {
@@ -204,9 +203,9 @@ public class CreatureAI : MonoBehaviour
     {
         if (other.tag == "Player" && stats.immunityFrames <= 0)
         {
-            attacker = other.gameObject;
             PlayerStatManager.Stats enemyStats;
             isAttackerPlayer = true;
+            attacker = other.gameObject;
             enemyStats = attacker.GetComponent<PlayerStatManager>().stats;
             if (enemyStats.damage != 0)
             {
@@ -215,9 +214,9 @@ public class CreatureAI : MonoBehaviour
         }
         if (other.tag == "Entity" && stats.immunityFrames <= 0)
         {
-            attacker = other.gameObject;
             CreatureAI.Stats enemyStats;
             isAttackerPlayer = false;
+            attacker = other.gameObject;
             enemyStats = attacker.GetComponent<CreatureAI>().stats;
             AddHP(enemyStats.damage * -1);
         }
