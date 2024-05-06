@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f69f0af327fca15ca2183db1f361d78, type: 3}
   m_Name: Dummy 1
   m_EditorClassIdentifier: 
-  iD: Dummy
-  itemName: Dummy
-  description: Dummy.
+  iD: Wood
+  itemName: Wood
+  description: A piece of wood.
   amount: 0
-  maxAmount: 60
+  maxAmount: 50
   rarety: 0
-  weight: 0.1
-  iconPath: {fileID: 0}
+  weight: 0.25
+  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   itemType: 0
   activeEquipement: 0

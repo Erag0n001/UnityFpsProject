@@ -19,6 +19,6 @@ MonoBehaviour:
   maxAmount: 60
   rarety: 0
   weight: 0.1
-  iconPath: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7a0dcd6730963df4fb7e83fca122fec6, type: 3}
   itemType: 0
   activeEquipement: 0

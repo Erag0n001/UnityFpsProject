@@ -722,7 +722,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b094c02ac5b0cd66d82c6f764234b643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 6f6683198a7bcacae8114df3c5106e1d, type: 2}
 --- !u!1 &549913226
 GameObject:
   m_ObjectHideFlags: 0
@@ -6200,9 +6199,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 954038156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a451e2991957dc34484c37c85b6ea13d, type: 3}
+  m_Script: {fileID: 11500000, guid: 314cfd802ad49bf2d9a2006169d290d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentSlot: 0
 --- !u!1 &956996166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6286,19 +6286,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e79c28bd2d64e00499148b949aee087e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemStatsList: []
-  hotbar:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  hotbarManager: {fileID: 0}
+  hotbarManager: {fileID: 954038158}
+  canvas: {fileID: 1718087553}
+  inventoryPrefab: {fileID: 2193577643596707043, guid: 6d2dc0d4f9010d64b9515d0b956554e1,
+    type: 3}
+  inventorySlotPrefab: {fileID: 4985722543469226875, guid: 1acef36e180ffc1458730569c1475ae0,
+    type: 3}
 --- !u!1001 &1159939546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7277,8 +7270,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keys: 
   activeEquipement: {fileID: 0}
-  inventoryPrefab: {fileID: 2193577643596707043, guid: 6d2dc0d4f9010d64b9515d0b956554e1,
-    type: 3}
   canvas: {fileID: 126880379}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
