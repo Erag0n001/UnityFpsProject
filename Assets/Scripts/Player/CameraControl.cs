@@ -12,6 +12,7 @@ public class CameraControl : MonoBehaviour
 
     public GameObject head;
     public GameObject character;
+    public bool isPlayerBusy;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -20,7 +21,10 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Camera();
+        if(!isPlayerBusy)
+        {
+            Camera();
+        }
     }
 
     void Camera()

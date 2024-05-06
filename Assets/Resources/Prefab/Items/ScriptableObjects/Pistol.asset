@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3be9481ed9453624e8b739372242ab19, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: 
+  iD: SimplePistol
+  itemName: Simple pistol
+  description: A simple pistol
+  amount: 0
+  maxAmount: 1
+  rarety: 0
+  weight: 2.5
+  icon: {fileID: 0}
+  itemType: 1
+  damage: 5
+  minRange: 50
+  maxRange: 100
+  allowedAmmoType:
+  - {fileID: 11400000, guid: 81e4e61fdd3b63efcaf3016a0518fb4d, type: 2}
+  currentAmmoType: {fileID: 0}
+  currentMagSize: 0
+  maxMagSize: 16
+  specialEffect: 0
+  weaponObject: {fileID: 0}

@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ba725c9fc6fe77409c8f373e77696fb, type: 3}
-  m_Name: Item
+  m_Script: {fileID: 11500000, guid: 2f69f0af327fca15ca2183db1f361d78, type: 3}
+  m_Name: Dummy 1
   m_EditorClassIdentifier: 
-  iD: 0
-  itemName: 
-  description: 
+  iD: Dummy
+  itemName: Dummy
+  description: Dummy.
   amount: 0
-  maxAmount: 0
+  maxAmount: 60
   rarety: 0
-  weight: 0
-  icon: {fileID: 0}
-  damage: 0
-  specialEffect: 2
-  specialEffectPotency: 0
+  weight: 0.1
+  iconPath: {fileID: 0}
+  itemType: 0
+  activeEquipement: 0

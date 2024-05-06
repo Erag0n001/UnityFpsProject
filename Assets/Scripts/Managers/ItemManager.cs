@@ -1,29 +1,26 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEditorInternal.Profiling.Memory.Experimental;
+using System.Reflection;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
-
 public class ItemManager : MonoBehaviour
 {
-    Item emptyItem;
     private void Awake()
     {
-        Item[] objectList;
         MainManager.itemManager = this;
-        objectList = Resources.LoadAll<Item>("Prefab/Items");
+        List<Item> objectList = LoadAllItems();
         MainManager.itemList = objectList;
-        emptyItem = Resources.Load<Item>("Prefab/Items/Empty");
         NetworkManager.Main();
     }
-
     public Item FetchItem()
     {
-        return CreateNewItem((MainManager.itemList[0]));
+        return CreateNewItem(MainManager.itemList[0]);
     }
 
     public Item CreateNewItem(Item itemToAssign)
     {
-        Item newItem = (Item)ScriptableObject.CreateInstance(typeof(Item));
+        PropertyInfo[] properties = itemToAssign.GetType().GetProperties();
+        Item newItem = new Item();
         newItem.iD = itemToAssign.iD;
         newItem.itemName = itemToAssign.itemName;
         newItem.description = itemToAssign.description;
@@ -37,7 +34,7 @@ public class ItemManager : MonoBehaviour
 
     public Item CreateNewEmptyItem(Item itemToAssign)
     {
-        Item newItem = (Item)ScriptableObject.CreateInstance(typeof(Item));
+        Item newItem = new Item();
         newItem.iD = itemToAssign.iD;
         newItem.itemName = itemToAssign.itemName;
         newItem.description = itemToAssign.description;
@@ -49,4 +46,34 @@ public class ItemManager : MonoBehaviour
         return newItem;
     }
 
+    public List<Item> LoadAllItems()
+    {
+        List<Item> objectList = new List<Item>();
+        ScriptableObject[] scriptableObjects = Resources.LoadAll<ScriptableObject>("Items");
+        print(scriptableObjects.Length);
+        for(int i = 0;i < scriptableObjects.Length;i++)
+        {
+            string converter;
+            switch(scriptableObjects[i].GetType().ToString())
+            {
+                case "ItemObject": 
+                    converter = JsonUtility.ToJson(scriptableObjects[i]);
+                    objectList.Add(JsonUtility.FromJson<Item>(converter));
+                    break;
+                case "RangedWeaponStatsObject":
+                    converter = JsonUtility.ToJson(scriptableObjects[i]);
+                    objectList.Add(JsonUtility.FromJson<RangedWeapon>(converter));
+                    break;
+                case "AmmoObject":
+                    converter = JsonUtility.ToJson(scriptableObjects[i]);
+                    objectList.Add(JsonUtility.FromJson<Ammo>(converter));
+                    break;
+                default:
+                    Debug.LogError($"{scriptableObjects[i].name} was not able to find a match. This shouldn't happen\nThe following type was detected for the item: {scriptableObjects[i].GetType().ToString()}");
+                    break;
+            }
+        }
+        
+        return objectList;
+    }
 }

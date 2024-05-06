@@ -12,19 +12,66 @@ using Unity.Mathematics;
 
 public class InventoryManager : MonoBehaviour
 {
+    [Header("InventoryMain")]
     public List<Item> itemStatsList= new List<Item>();
-    public int currentItemId = 0;
+    public Item[] hotbar;
+    public HotbarManager hotbarManager;
+    private bool inventoryBool;
+
+    private GameObject inventoryObject;
+    [Header("InventoryUI")]
+    public GameObject canvas;
+    public GameObject inventoryPrefab;
+    public GameObject inventorySlotPrefab;
+    bool needUpdating;
+    
     private void Awake()
     {
         MainManager.inventoryManager = this;
         MainManager.playerInventory = Resources.Load<GameObject>("UI/InventoryMain");
     }
+
     private void Start()
     {
         itemStatsList = new List<Item>();
+        hotbarManager = MainManager.playerHotbar;
+        hotbar = hotbarManager.hotbar;
+        inventoryBool = true;
+        AddItem(MainManager.itemManager.CreateNewItem(MainManager.itemList[1]));
+    }
+
+    public void InventoryUpdate()
+    {
+        Transform grid = GameObject.FindWithTag("InventoryContent").transform; print(grid.name);
+        itemStatsList = itemStatsList.OrderBy(item => item.iD).ToList();
+        foreach(Item item in itemStatsList)
+        {
+            GameObject slot = GameObject.Instantiate(inventorySlotPrefab);
+            slot.transform.SetParent(grid);
+            slot.transform.localScale = new Vector3(1,1,1);
+            slot.GetComponent<UnityEngine.UI.Image>().sprite = item.icon;
+        }
+    }
+
+    public void InventoryUIShow()
+    {
+        if (inventoryBool)
+        {
+            inventoryObject = GameObject.Instantiate(inventoryPrefab);
+            inventoryObject.transform.SetParent(canvas.transform, false);
+            inventoryBool = false;
+            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            InventoryUpdate();
+        }
+        else
+        {
+            GameObject.Destroy(inventoryObject);
+            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            inventoryBool = true;
+        }
     }
         
-    Item CheckForExistingItem(int itemID)
+    Item CheckForExistingItem(string itemID)
     {
         foreach (Item itemStats in itemStatsList)
         {
@@ -36,7 +83,7 @@ public class InventoryManager : MonoBehaviour
         return null;
     }
 
-    public double AmountOfItemInInventory(int itemID)
+    public double AmountOfItemInInventory(string itemID)
     {
         double amount = 0;
         foreach (Item itemStats in itemStatsList)
@@ -47,11 +94,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
         return amount;
-    }
-
-    public void UpdateInventory()
-    {
-
     }
 
     //Remove a single item
@@ -82,6 +124,8 @@ public class InventoryManager : MonoBehaviour
             print("Not enough item in inventory");
             return false;
         }
+        InventoryUIShow();
+        InventoryUIShow();
         return false;
     }
 
@@ -90,9 +134,7 @@ public class InventoryManager : MonoBehaviour
     {
         foreach (Item item in itemArray) 
         {
-#pragma warning disable CS4014
             RemoveItem(item);
-#pragma warning restore CS4014
         }
     }
     //Remove a slot
@@ -137,6 +179,19 @@ public class InventoryManager : MonoBehaviour
         {
             inventoryItem.amount += item.amount;
         }
+
+        if(item.itemType == Item.ItemType.Weapon)
+        {
+            for(int i = 0; i >= 10;i++)
+            {
+                if(hotbar[i] == null)
+                {
+                    hotbar[i] = item;
+                }
+            }
+        }
+        InventoryUIShow();
+        InventoryUIShow();
     }
     //Add multiple item
     public void AddItem(Item[] itemArray)

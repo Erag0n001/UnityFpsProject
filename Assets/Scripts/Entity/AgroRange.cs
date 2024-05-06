@@ -56,11 +56,6 @@ public class AgroRange : MonoBehaviour
             enemyInRange = enemyInRange.OrderBy(enemy => Vector3.Distance(transform.position, enemy.transform.position)).ToList();
 
             creatureAI.SetAgro(enemyInRange[0]);
-            foreach(GameObject enemy in enemyInRange)
-            {
-                print(enemy.name + " " + enemyInRange.IndexOf(enemy));
-                print(Vector3.Distance(transform.position, enemy.transform.position));
-            }
         }
     }
 }

@@ -12,7 +12,7 @@ public static class MainManager
     public static InventoryManager inventoryManager;
 
     [Header("Items")]
-    public static Item[] itemList;
+    public static List<Item> itemList;
     public static GameObject[] lootList;
 
     [Header("Entities")]
@@ -26,5 +26,7 @@ public static class MainManager
     public static CharacterMovement playerMovement;
     public static bool isPlayerAlive;
     public static GameObject playerInventory;
+    public static HotbarManager playerHotbar;
     public static Quaternion PlayerRot;
+    public static bool isPlayerInInventory;
 }

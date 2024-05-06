@@ -44,7 +44,7 @@ public class RespawnManager : MonoBehaviour
     void Update()
     {
         entityRespawnCooldown += 1 * Time.deltaTime;
-        if (entityRespawnCooldown >= 5)
+        if (entityRespawnCooldown >= 1)
         {
             entityRespawnCooldown = 0;
             EntityRespawn();

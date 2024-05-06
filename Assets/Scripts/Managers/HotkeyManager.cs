@@ -11,11 +11,6 @@ public class HotkeyManager : MonoBehaviour
     [Header("Player Input")]
     [SerializeField] private ActiveEquipement activeEquipement;
 
-    [Header("Inventory")]
-    [SerializeField] private GameObject inventoryPrefab;
-    private GameObject inventoryObject;
-    bool inventoryBool;
-
     [Header("Other UI")]
     [SerializeField] private GameObject canvas;
     private void Awake()
@@ -25,7 +20,6 @@ public class HotkeyManager : MonoBehaviour
     void Start()
     {
         keys = new KeyCode[] { KeyCode.Tab,KeyCode.LeftShift, KeyCode.LeftControl, KeyCode.Space, KeyCode.Mouse0};
-        inventoryBool = true;
     }
 
     void Update()
@@ -36,10 +30,11 @@ public class HotkeyManager : MonoBehaviour
             {
                 switch (keys[i])
                 {
-                    case KeyCode.Tab: InventoryCheck(); break;
+                    case KeyCode.Tab: MainManager.inventoryManager.InventoryUIShow(); break;
                     case KeyCode.LeftShift: MainManager.playerMovement.SprintingDown();  break;
                     case KeyCode.LeftControl: MainManager.playerMovement.CrouchingDown(); break;
                     case KeyCode.Space: MainManager.playerMovement.Jump(); break;
+                    case KeyCode.Mouse0 : MainManager.playerHotbar.UseItem(); break;
                 }
             }
             if (Input.GetKeyUp(keys[i]))
@@ -50,22 +45,29 @@ public class HotkeyManager : MonoBehaviour
                     case KeyCode.LeftControl: MainManager.playerMovement.CrouchingUp(); break;
                 }
             }
-        }
-    }
-
-    void InventoryCheck()
-    {
-        if (inventoryBool)
-        {
-            inventoryObject = GameObject.Instantiate(inventoryPrefab);
-            inventoryObject.transform.SetParent(canvas.transform, false);
-            //inventoryObject.transform.GetComponent<"RectTransform"> = new Vector2(-400, -130);
-            inventoryBool = false;
-        }
-        else
-        {
-            GameObject.Destroy(inventoryObject);
-            inventoryBool = true;
+            //Hotbar stuff
+            if(Input.mouseScrollDelta.y > 0)
+            {
+                if(MainManager.playerHotbar.currentSlot == 10)
+                {
+                    MainManager.playerHotbar.currentSlot = 0;
+                } 
+                else 
+                {
+                    MainManager.playerHotbar.currentSlot +=1;
+                }
+            } 
+            else if(Input.mouseScrollDelta.y < 0)
+            {
+                if(MainManager.playerHotbar.currentSlot == 0)
+                {
+                    MainManager.playerHotbar.currentSlot = 10;
+                } 
+                else 
+                {
+                    MainManager.playerHotbar.currentSlot -=1;
+                }
+            } 
         }
     }
 }

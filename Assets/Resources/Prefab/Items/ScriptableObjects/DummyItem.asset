@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cd8aa5d3f133424eb9401b08df8b679, type: 3}
   m_Name: DummyItem
   m_EditorClassIdentifier: 
-  iD: 0
+  iD: DummyItem
   itemName: dummy
   description: 
   amount: 0
   maxAmount: 50
   rarety: 0
   weight: 0
-  itemType: 3
   icon: {fileID: 2800000, guid: 7a0dcd6730963df4fb7e83fca122fec6, type: 3}
+  itemType: 3
