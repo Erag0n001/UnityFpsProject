@@ -8,8 +8,6 @@ public class Inventory : MonoBehaviour
 {
     [Header("InventoryMain")]
     public List<Item> itemStatsList= new List<Item>();
-    public Item[] hotbar;
-    public HotbarManager hotbarManager;
     public bool inventoryBool;
 
     public GameObject inventoryObject;
@@ -21,8 +19,6 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         itemStatsList = new List<Item>();
-        hotbarManager = MainManager.playerHotbar;
-        hotbar = hotbarManager.hotbar;
         inventoryBool = true;
     }
 
@@ -166,17 +162,6 @@ public class Inventory : MonoBehaviour
         else
         {
             inventoryItem.amount += item.amount;
-        }
-
-        if(item.itemType == Item.ItemType.Weapon)
-        {
-            for(int i = 0; i >= 10;i++)
-            {
-                if(hotbar[i] == null)
-                {
-                    hotbar[i] = item;
-                }
-            }
         }
         if(!inventoryBool)
         {

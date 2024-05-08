@@ -26,22 +26,4 @@ public class InventoryPlayer : Inventory
             inventoryBool = true;
         }
     }
-
-    public void PlayerInventoryUIShow()
-    {
-        if (inventoryBool)
-        {
-            inventoryObject = GameObject.Instantiate(inventoryPrefab);
-            inventoryObject.transform.SetParent(canvas.transform, false);
-            inventoryBool = false;
-            MainManager.playerCameraControl.UnlockCursor();
-            InventoryUpdate();
-        }
-        else
-        {
-            GameObject.Destroy(inventoryObject);
-            MainManager.playerCameraControl.LockCursor();
-            inventoryBool = true;
-        }
-    }
 }
