@@ -9,7 +9,6 @@ public static class MainManager
     public static LootManager lootManager;
     public static HotkeyManager hotkeyManager;
     public static ItemManager itemManager;
-    public static InventoryManager inventoryManager;
 
     [Header("Items")]
     public static List<Item> itemList;
@@ -25,8 +24,9 @@ public static class MainManager
     public static PlayerStatManager playerStatManager;
     public static CharacterMovement playerMovement;
     public static bool isPlayerAlive;
-    public static GameObject playerInventory;
     public static HotbarManager playerHotbar;
     public static Quaternion PlayerRot;
     public static bool isPlayerInInventory;
+    public static InventoryPlayer playerInventory = new InventoryPlayer();
+    public static CameraControl playerCameraControl;
 }

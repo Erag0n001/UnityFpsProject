@@ -9,7 +9,7 @@ public class Looting : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Player"))
         {
-            MainManager.inventoryManager.AddItem(containedItem);
+            MainManager.playerInventory.AddItem(containedItem);
             GameObject.Destroy(gameObject);
         }
     }

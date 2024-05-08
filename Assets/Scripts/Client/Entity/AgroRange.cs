@@ -32,7 +32,7 @@ public class AgroRange : MonoBehaviour
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         CheckMembers();
         CheckAgro();

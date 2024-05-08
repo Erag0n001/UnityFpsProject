@@ -30,7 +30,7 @@ public class HotkeyManager : MonoBehaviour
             {
                 switch (keys[i])
                 {
-                    case KeyCode.Tab: MainManager.inventoryManager.InventoryUIShow(); break;
+                    case KeyCode.Tab: MainManager.playerInventory.InventoryUIShow(); break;
                     case KeyCode.LeftShift: MainManager.playerMovement.SprintingDown();  break;
                     case KeyCode.LeftControl: MainManager.playerMovement.CrouchingDown(); break;
                     case KeyCode.Space: MainManager.playerMovement.Jump(); break;

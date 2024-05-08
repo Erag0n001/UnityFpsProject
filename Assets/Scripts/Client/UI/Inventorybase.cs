@@ -1,35 +1,22 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using System.Threading.Tasks;
-using UnityEngine.Rendering.Universal;
-using static UnityEditor.Progress;
-using Unity.Mathematics;
 
-public class InventoryManager : MonoBehaviour
+public class Inventory : MonoBehaviour
 {
     [Header("InventoryMain")]
     public List<Item> itemStatsList= new List<Item>();
     public Item[] hotbar;
     public HotbarManager hotbarManager;
-    private bool inventoryBool;
+    public bool inventoryBool;
 
-    private GameObject inventoryObject;
+    public GameObject inventoryObject;
     [Header("InventoryUI")]
     public GameObject canvas;
     public GameObject inventoryPrefab;
     public GameObject inventorySlotPrefab;
-    bool needUpdating;
-    
-    private void Awake()
-    {
-        MainManager.inventoryManager = this;
-        MainManager.playerInventory = Resources.Load<GameObject>("UI/InventoryMain");
-    }
 
     private void Start()
     {
@@ -37,12 +24,11 @@ public class InventoryManager : MonoBehaviour
         hotbarManager = MainManager.playerHotbar;
         hotbar = hotbarManager.hotbar;
         inventoryBool = true;
-        AddItem(MainManager.itemManager.CreateNewItem(MainManager.itemList[1]));
     }
 
     public void InventoryUpdate()
     {
-        Transform grid = GameObject.FindWithTag("InventoryContent").transform; print(grid.name);
+        Transform grid = inventoryObject.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).transform.GetChild(0);
         itemStatsList = itemStatsList.OrderBy(item => item.iD).ToList();
         foreach(Item item in itemStatsList)
         {
@@ -53,20 +39,20 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public void InventoryUIShow()
+    public virtual void InventoryUIShow()
     {
         if (inventoryBool)
         {
             inventoryObject = GameObject.Instantiate(inventoryPrefab);
-            inventoryObject.transform.SetParent(canvas.transform, false);
+            inventoryObject.transform.SetParent(this.gameObject.transform, false);
             inventoryBool = false;
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            MainManager.playerCameraControl.UnlockCursor();
             InventoryUpdate();
         }
         else
         {
             GameObject.Destroy(inventoryObject);
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            MainManager.playerCameraControl.LockCursor();
             inventoryBool = true;
         }
     }
@@ -124,8 +110,11 @@ public class InventoryManager : MonoBehaviour
             print("Not enough item in inventory");
             return false;
         }
-        InventoryUIShow();
-        InventoryUIShow();
+        if(!inventoryBool)
+        {
+            InventoryUIShow();
+            InventoryUIShow();
+        }
         return false;
     }
 
@@ -171,7 +160,6 @@ public class InventoryManager : MonoBehaviour
             double amountToLoop = Math.Ceiling(item.amount / item.maxAmount);
             for (int i = 0; amountToLoop > i; i++)
             {
-                print($"Creating new stack, amount left = {amountToLoop}, math = {item.amount / item.maxAmount}");
                 item.amount = CreateNewItemEntry(item);
             }
         }
@@ -190,8 +178,11 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
-        InventoryUIShow();
-        InventoryUIShow();
+        if(!inventoryBool)
+        {
+            InventoryUIShow();
+            InventoryUIShow();
+        }
     }
     //Add multiple item
     public void AddItem(Item[] itemArray)

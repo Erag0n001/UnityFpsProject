@@ -13,6 +13,11 @@ public class CameraControl : MonoBehaviour
     public GameObject head;
     public GameObject character;
     public bool isPlayerBusy;
+    private int cursorLock;
+    void Awake()
+    {
+        MainManager.playerCameraControl = this;
+    }
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -38,5 +43,24 @@ public class CameraControl : MonoBehaviour
         head.transform.rotation = Quaternion.Euler(oldMousePX, oldMousePY, 0);
         character.transform.rotation = Quaternion.Euler(0, oldMousePY, 0);
         MainManager.PlayerRot = character.transform.rotation;
+    }
+
+    public void UnlockCursor()
+    {
+        cursorLock++;
+        isPlayerBusy = true;
+        Cursor.lockState = CursorLockMode.None;
+        print(cursorLock + "Unlocked");
+    }
+    
+    public void LockCursor()
+    {
+        cursorLock--;
+        if(cursorLock == 0)
+        {
+            isPlayerBusy = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        print(cursorLock + "Locked");
     }
 }
