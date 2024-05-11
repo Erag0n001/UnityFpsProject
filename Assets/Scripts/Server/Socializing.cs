@@ -6,72 +6,82 @@ using System;
 
 namespace Server
 {
-public class Socializing
-    {
-        public TcpClient connection;
-        public NetworkStream networkStream;
-
-        public bool shouldClose;
-
-        public StreamWriter streamWriter;
-        public StreamReader streamReader;
-public void Listen()
+    public class Socializing
         {
-            try
+            public TcpClient connection;
+            public NetworkStream networkStream;
+
+            public bool shouldClose;
+
+            public StreamWriter streamWriter;
+            public StreamReader streamReader;
+            public Socializing(TcpClient connection)
             {
-                while (true)
-                {
-                    Thread.Sleep(1);
-                    string data = streamReader.ReadLine();
-                    if (string.IsNullOrEmpty(data)) { continue; }
-                    else
-                    {
-                        Console.WriteLine(data);
-                        shouldClose = false;
-                    }
-                }
-            } catch(Exception ex) { Console.WriteLine(ex); }
-            KillConnection();
-        }
-        public void Send()
-        {
-            try
+                this.connection = connection;
+                networkStream = connection.GetStream();
+                streamWriter = new StreamWriter(networkStream);
+                streamReader = new StreamReader(networkStream);
+                Task.Run(delegate { Listen(); });
+                Task.Run(delegate { Send(); });
+                Task.Run(delegate { CheckConnection(); });
+            }
+            public void Listen()
             {
-                while (true)
+                try
                 {
-                    Thread.Sleep(1);
-                    string data = "test";
-                    streamWriter.WriteLine(data);
-                    streamWriter.Flush();
-                }
-            } catch (Exception ex) { Console.WriteLine(ex); }
-            KillConnection();
-        }
-
-        public void CheckConnection()
-        {
-            try
+                    while (true)
+                    {
+                        Thread.Sleep(1);
+                        string data = streamReader.ReadLine();
+                        if (string.IsNullOrEmpty(data)) { continue; }
+                        else
+                        {
+                            Console.WriteLine(data);
+                            shouldClose = false;
+                        }
+                    }
+                } catch(Exception ex) { Console.WriteLine(ex); }
+                KillConnection();
+            }
+            public void Send()
             {
-                while (true)
+                try
                 {
-                    Thread.Sleep(15000);
-                    if (shouldClose)
+                    while (true)
                     {
-                        break;
+                        Thread.Sleep(1);
+                        string data = "test";
+                        streamWriter.WriteLine(data);
+                        streamWriter.Flush();
                     }
-                    else
-                    {
-                        shouldClose = true;
-                    }
-                }
-            } catch(Exception ex) { Console.WriteLine(ex); }
-            KillConnection();
-        }
+                } catch (Exception ex) { Console.WriteLine(ex); }
+                KillConnection();
+            }
 
-        public void KillConnection()
-        {
-            connection.Close();
-            connection.Dispose();
+            public void CheckConnection()
+            {
+                try
+                {
+                    while (true)
+                    {
+                        Thread.Sleep(15000);
+                        if (shouldClose)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            shouldClose = true;
+                        }
+                    }
+                } catch(Exception ex) { Console.WriteLine(ex); }
+                KillConnection();
+            }
+
+            public void KillConnection()
+            {
+                connection.Close();
+                connection.Dispose();
+            }
         }
-    }
 }

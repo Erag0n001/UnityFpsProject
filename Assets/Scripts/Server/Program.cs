@@ -1,8 +1,7 @@
-﻿
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System;
-namespace Test
+namespace Server
 {
     public class Test 
     {

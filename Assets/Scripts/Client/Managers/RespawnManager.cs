@@ -79,7 +79,7 @@ public class RespawnManager : MonoBehaviour
         CreatureAI statTemplate = selectedCreature.GetComponent<CreatureAI>();
         statTemplate.stats.hitPoint *= sizeMultiplier;
         statTemplate.stats.damage *= sizeMultiplier;
-        if(creatureAI.aIType == CreatureAI.AIType.Aggressive)
+        if(creatureAI.stats.aIType == CreatureAI.CreatureStat.AIType.Aggressive)
         {
             statTemplate.stats.agroRange *= sizeMultiplier;
             selectedCreature.GetComponentInChildren<SphereCollider>().radius = statTemplate.stats.agroRange;

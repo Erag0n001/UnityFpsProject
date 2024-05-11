@@ -23,7 +23,7 @@ public class PlayerStatManager : MonoBehaviour
         [NonSerialized] public float immunityFrames;
     }
     public Stats stats;
-    private CreatureAI.Stats enemyStats;
+    private CreatureAI.CreatureStat enemyStats;
     private GameObject enemy;
     private GameObject deadPlayerPrebad;
 

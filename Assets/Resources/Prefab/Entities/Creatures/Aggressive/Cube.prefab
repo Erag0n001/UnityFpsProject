@@ -276,6 +276,15 @@ MonoBehaviour:
     maxSize: 1.2
     baseSpeed: 3.5
     sprintingSpeed: 4
-  aIType: 3
-  pathFinding: {fileID: 8025247457020830765}
-  attacker: {fileID: 0}
+    immunityFrames: 0
+    aIType: 3
+    hit: 0
+    isAttackerPlayer: 0
+    pathFinding: {fileID: 8025247457020830765}
+    attacker: {fileID: 0}
+    wandering: 0
+    wanderingPos: {x: 0, y: 0, z: 0}
+    wanderingTick: 0
+    fleeing: 0
+    aggressive: 0
+    agroRangeCollider: {fileID: 8211939053285213383}
