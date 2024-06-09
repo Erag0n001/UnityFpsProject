@@ -3,51 +3,53 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-
-public class ActiveEquipement : MonoBehaviour
+namespace Client
 {
-    public Transform[] activeEquipementList;
-    public GameObject[] equippedEquipementList; 
-    private KeyCode[] keys;
-    void Start()
+    public class ActiveEquipement : MonoBehaviour
     {
-        GameObject equipement = GameObject.Find("ActiveEquipement");
-        activeEquipementList = equipement.GetComponentsInChildren<Transform>(true);
-        int i = 0;
-        foreach (Transform child in equipement.transform)
+        public Transform[] activeEquipementList;
+        public GameObject[] equippedEquipementList;
+        private KeyCode[] keys;
+        void Start()
         {
-            activeEquipementList[i] = child;
-            i += 1;
-        }
-        equippedEquipementList = new GameObject[10];
-        keys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9, KeyCode.Alpha0 };
-        equippedEquipementList[0] = activeEquipementList[0].transform.gameObject;
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        for (int i = 0; i < keys.Length; i++)
-        {
-            if (Input.GetKeyDown(keys[i]))
+            GameObject equipement = GameObject.Find("ActiveEquipement");
+            activeEquipementList = equipement.GetComponentsInChildren<Transform>(true);
+            int i = 0;
+            foreach (Transform child in equipement.transform)
             {
-                Unequip();
-                if (equippedEquipementList[i])
+                activeEquipementList[i] = child;
+                i += 1;
+            }
+            equippedEquipementList = new GameObject[10];
+            keys = new KeyCode[] { KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9, KeyCode.Alpha0 };
+            equippedEquipementList[0] = activeEquipementList[0].transform.gameObject;
+
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            for (int i = 0; i < keys.Length; i++)
+            {
+                if (Input.GetKeyDown(keys[i]))
                 {
-                    equippedEquipementList[i].SetActive(true);
+                    Unequip();
+                    if (equippedEquipementList[i])
+                    {
+                        equippedEquipementList[i].SetActive(true);
+                    }
                 }
             }
         }
-    }
 
-    void Unequip()
-    {
-        for (int i = 0; i < 10; i++)
+        void Unequip()
         {
-            if (equippedEquipementList[i])
+            for (int i = 0; i < 10; i++)
             {
-                equippedEquipementList[i].SetActive(false);
+                if (equippedEquipementList[i])
+                {
+                    equippedEquipementList[i].SetActive(false);
+                }
             }
         }
     }

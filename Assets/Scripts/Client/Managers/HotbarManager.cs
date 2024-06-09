@@ -1,23 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class HotbarManager : MonoBehaviour
+using Shared;
+namespace Client
 {
-    public int currentSlot;
-
-    public Item[] hotbar = new Item[10];
-
-    private void Awake()
+    public class HotbarManager : MonoBehaviour
     {
-        MainManager.playerHotbar = this;
-    }
+        public int currentSlot;
 
-    public void UseItem()
-    {
-        if(hotbar[currentSlot] != null)
+        public Item[] hotbar = new Item[10];
+
+        private void Awake()
         {
-            hotbar[currentSlot].Use();
+            MainManager.playerHotbar = this;
+            NetworkManager.Main();
+        }
+
+        public void UseItem()
+        {
+            if (hotbar[currentSlot] != null)
+            {
+                hotbar[currentSlot].Use();
+            }
         }
     }
 }

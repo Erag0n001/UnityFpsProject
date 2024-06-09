@@ -3,59 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-
-public class AgroRange : MonoBehaviour
+namespace Client
 {
-    CreatureAI creatureAI;
-    public List<GameObject> enemyInRange;
-    void Start()
+    public class AgroRange : MonoBehaviour
     {
-        creatureAI = gameObject.GetComponentInParent<CreatureAI>();
-    }
-    
-    private void OnTriggerExit(Collider other)
-    {
-        enemyInRange.Remove(other.gameObject);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject != creatureAI.gameObject)
+        CreatureAI creatureAI;
+        public List<GameObject> enemyInRange;
+        void Start()
         {
-            if(!enemyInRange.Contains(other.gameObject))
+            creatureAI = gameObject.GetComponentInParent<CreatureAI>();
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            enemyInRange.Remove(other.gameObject);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject != creatureAI.gameObject)
             {
-                if(other.gameObject.CompareTag("Entity") || other.gameObject.CompareTag("Player"))
+                if (!enemyInRange.Contains(other.gameObject))
                 {
-                    enemyInRange.Insert(0,other.gameObject);
-                }   
+                    if (other.gameObject.CompareTag("Entity") || other.gameObject.CompareTag("Player"))
+                    {
+                        enemyInRange.Insert(0, other.gameObject);
+                    }
+                }
             }
         }
-    }
 
-    void FixedUpdate()
-    {
-        CheckMembers();
-        CheckAgro();
-    }
-
-    void CheckMembers()
-    {
-        foreach(GameObject enemy in enemyInRange.ToArray())
+        void FixedUpdate()
         {
-            if(enemy == null)
+            CheckMembers();
+            CheckAgro();
+        }
+
+        void CheckMembers()
+        {
+            foreach (GameObject enemy in enemyInRange.ToArray())
             {
-                enemyInRange.Remove(enemy);
+                if (enemy == null)
+                {
+                    enemyInRange.Remove(enemy);
+                }
             }
         }
-    }
 
-    void CheckAgro()
-    {
-        if(enemyInRange.Count > 0)
+        void CheckAgro()
         {
-            enemyInRange = enemyInRange.OrderBy(enemy => Vector3.Distance(transform.position, enemy.transform.position)).ToList();
+            if (enemyInRange.Count > 0)
+            {
+                enemyInRange = enemyInRange.OrderBy(enemy => Vector3.Distance(transform.position, enemy.transform.position)).ToList();
 
-            creatureAI.SetAgro(enemyInRange[0]);
+                creatureAI.SetAgro(enemyInRange[0]);
+            }
         }
     }
 }

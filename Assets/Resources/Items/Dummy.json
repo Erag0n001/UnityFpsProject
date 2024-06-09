@@ -1,0 +1,12 @@
+{
+    "iD": "Dummy",
+    "itemName": "Dummy",
+    "description": "This item should not exist",
+    "amount": 0.0,
+    "maxAmount": 50,
+    "rarety": 0,
+    "weight": 0.1,
+    "iconID": "Dummy",
+    "itemType": 0,
+    "activeEquipement": false
+}

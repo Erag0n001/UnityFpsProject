@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Looting : MonoBehaviour
+using Shared;
+namespace Client
 {
-    public Item containedItem;
-    private void OnTriggerEnter(Collider collider)
+    public class Looting : MonoBehaviour
     {
-        if (collider.gameObject.CompareTag("Player"))
+        public Item containedItem;
+        private void OnTriggerEnter(Collider collider)
         {
-            MainManager.playerInventory.AddItem(containedItem);
-            GameObject.Destroy(gameObject);
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                InventoryManager.AddItem(containedItem, MainManager.playerInventory);
+                GameObject.Destroy(gameObject);
+            }
         }
     }
 }

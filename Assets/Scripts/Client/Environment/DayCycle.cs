@@ -1,31 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class DayCycle : MonoBehaviour
+namespace Client
 {
-    private float time;
-    // Start is called before the first frame update
-    void Start()
+    public class DayCycle : MonoBehaviour
     {
-        time = 9000;
-    }
+        private float time;
+        // Start is called before the first frame update
+        void Start()
+        {
+            time = 9000;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        time += 10 * Time.deltaTime;
-        if (time < 18000)
+        // Update is called once per frame
+        void Update()
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-        } else if (time >= 18000)
-        {
-            transform.GetChild(0).gameObject.SetActive(false);
+            time += 10 * Time.deltaTime;
+            if (time < 18000)
+            {
+                transform.GetChild(0).gameObject.SetActive(true);
+            }
+            else if (time >= 18000)
+            {
+                transform.GetChild(0).gameObject.SetActive(false);
+            }
+            if (time >= 36000)
+            {
+                time = 0;
+            }
+            transform.rotation = Quaternion.Euler(time / 100, 0, 0);
         }
-        if (time >= 36000)
-        {
-            time = 0;
-        }
-        transform.rotation = Quaternion.Euler(time / 100, 0, 0);
     }
 }

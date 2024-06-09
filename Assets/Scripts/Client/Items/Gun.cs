@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public static class Gun
+using Shared;
+namespace Client
 {
-    public static LayerMask layerMask = 7;
-    public static void Use(RangedWeapon weapon, Transform transform)
+    public static class Gun
     {
-        RaycastHit hit;
-
-        if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, weapon.minRange, layerMask))
+        public static LayerMask layerMask = 7;
+        public static void Use(RangedWeapon weapon, Transform transform)
         {
-            Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward));
-            Debug.Log("Hit");
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, weapon.minRange, layerMask))
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward));
+                Printer.Log("Hit");
+            }
         }
     }
 }
