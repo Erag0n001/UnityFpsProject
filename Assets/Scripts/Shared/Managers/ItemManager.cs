@@ -48,7 +48,7 @@ namespace Shared
 
         public static void LoadAllItems()
         {
-            TextAsset[] itemObjects = Resources.LoadAll<TextAsset>("Items");
+            TextAsset[] itemObjects = Resources.LoadAll<TextAsset>("JsonData/Items");
             for (int i = 0; i < itemObjects.Length; i++)
             {
                 string converter = itemObjects[i].text;

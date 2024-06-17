@@ -1,7 +1,8 @@
 using System;
 namespace Shared
 {
-    [Serializable]public class Item : IUse
+    [Serializable]
+    public class Item : IUse
     {
         public string iD;
         public string itemName;

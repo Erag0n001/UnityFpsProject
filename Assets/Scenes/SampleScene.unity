@@ -727,6 +727,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b094c02ac5b0cd66d82c6f764234b643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  item:
+    iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
 --- !u!1 &549913226
 GameObject:
   m_ObjectHideFlags: 0
@@ -6208,6 +6219,107 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSlot: 0
+  hotbar:
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
+  - iD: 
+    itemName: 
+    description: 
+    amount: 0
+    maxAmount: 0
+    rarety: 0
+    weight: 0
+    iconID: 
+    itemType: 0
+    activeEquipement: 0
 --- !u!1 &956996166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6290,13 +6402,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a78f81d3d86de184ad11c8a084143af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventoryBool: 0
-  inventoryObject: {fileID: 0}
-  canvas: {fileID: 1718087553}
-  inventoryPrefab: {fileID: 2193577643596707043, guid: 6d2dc0d4f9010d64b9515d0b956554e1,
-    type: 3}
-  inventorySlotPrefab: {fileID: 4985722543469226875, guid: 1acef36e180ffc1458730569c1475ae0,
-    type: 3}
 --- !u!1001 &1159939546
 PrefabInstance:
   m_ObjectHideFlags: 0

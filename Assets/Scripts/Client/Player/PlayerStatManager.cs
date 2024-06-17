@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Client
             [NonSerialized] public float immunityFrames;
         }
         public Stats stats;
-        private CreatureAI.CreatureStat enemyStats;
+        private CreatureStats enemyStats;
         private GameObject enemy;
         private GameObject deadPlayerPrebad;
 
@@ -59,7 +60,7 @@ namespace Client
             if (enemy.tag == "Entity" && stats.immunityFrames <= 0)
             {
                 statTemplate = enemy.GetComponent<CreatureAI>();
-                enemyStats = statTemplate.stats;
+                enemyStats = statTemplate.creature.stats;
                 if (enemyStats.damage != 0)
                 {
                     ThreadingMisc.Threader(delegate { this.AddHP(enemyStats.damage * -1); });
