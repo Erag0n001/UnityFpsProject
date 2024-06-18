@@ -7,8 +7,9 @@ namespace Shared
     [Serializable]
     public class Creature
     {
-        public int id;
-        public string name;
+        public int instanceId;
+        public string instanceName;
+        public string uniqueName;
         public CreatureStats stats = new CreatureStats();
     }
 
@@ -27,7 +28,6 @@ namespace Shared
         public enum AIType { PassiveFlee, Passive, Neutral, Aggressive };
         public bool hit;
         public bool isAttackerPlayer;
-        public NavMeshAgent pathFinding = null;
         public GameObject attacker = null;
         
         public bool wandering;
@@ -44,8 +44,7 @@ namespace Shared
     [Serializable]
     public class CreatureBase
     {
-        public int id;
-        public string name;
+        public string uniqueName;
         public CreatureStatsBase stats = new CreatureStatsBase();
     }
     [Serializable]

@@ -59,7 +59,7 @@ namespace Client
                 {
                     case CreatureStats.AIType.PassiveFlee:
                         creature.stats.fleeing = true;
-                        creature.stats.pathFinding.speed = creature.stats.sprintingSpeed;
+                        pathFinding.speed = creature.stats.sprintingSpeed;
                         break;
                     case CreatureStats.AIType.Neutral:
                         creature.stats.aggressive = true;
@@ -101,7 +101,8 @@ namespace Client
             if (creature.stats.wandering && creature.stats.wanderingTick >= 5)
             {
                 creature.stats.wanderingPos = new Vector3(UnityEngine.Random.Range(gameObject.transform.position.x - 10f, gameObject.transform.position.x + 10f), gameObject.transform.position.y, UnityEngine.Random.Range(gameObject.transform.position.z - 10f, gameObject.transform.position.z + 10f));
-                creature.stats.pathFinding.SetDestination(creature.stats.wanderingPos);
+                Printer.Log($"{creature.stats.wanderingPos}");
+                pathFinding.SetDestination(creature.stats.wanderingPos);
                 creature.stats.wanderingTick = 0;
             }
         }

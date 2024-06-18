@@ -111,7 +111,7 @@ GameObject:
   - component: {fileID: 9151750831194248839}
   - component: {fileID: -3096496129228536670}
   m_Layer: 7
-  m_Name: Cube
+  m_Name: RedCube
   m_TagString: Entity
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -267,24 +267,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 537bf7221f962b8eda599cc3f41cc6bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats:
-    hitPoint: 25
-    damage: 3
-    agroRange: 10
-    enemyQuality: 0
-    minSize: 0.8
-    maxSize: 1.2
-    baseSpeed: 3.5
-    sprintingSpeed: 4
-    immunityFrames: 0
-    aIType: 3
-    hit: 0
-    isAttackerPlayer: 0
-    pathFinding: {fileID: 8025247457020830765}
-    attacker: {fileID: 0}
-    wandering: 0
-    wanderingPos: {x: 0, y: 0, z: 0}
-    wanderingTick: 0
-    fleeing: 0
-    aggressive: 0
-    agroRangeCollider: {fileID: 8211939053285213383}
+  creature:
+    id: 0
+    name: 
+    stats:
+      hitPoint: 0
+      damage: 0
+      agroRange: 0
+      enemyQuality: 0
+      minSize: 0
+      maxSize: 0
+      baseSpeed: 0
+      sprintingSpeed: 0
+      aIType: 0
+      hit: 0
+      isAttackerPlayer: 0
+      pathFinding: {fileID: 0}
+      attacker: {fileID: 0}
+      wandering: 0
+      wanderingPos: {x: 0, y: 0, z: 0}
+      wanderingTick: 0
+      fleeing: 0
+      aggressive: 0
+      agroRangeCollider: {fileID: 0}
+      immunityFrames: 0
+  pathFinding: {fileID: 8025247457020830765}

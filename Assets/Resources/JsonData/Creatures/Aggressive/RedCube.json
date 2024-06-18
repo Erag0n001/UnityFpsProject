@@ -1,0 +1,14 @@
+{
+    "uniqueName": "RedCube",
+    "stats": {
+        "hitPoint": 30.0,
+        "damage": 1.0,
+        "agroRange": 5.0,
+        "enemyQuality": 1.0,
+        "minSize": 0.5,
+        "maxSize": 1.0,
+        "baseSpeed": 3.0,
+        "sprintingSpeed": 4.0,
+        "aIType": 3
+    }
+}

@@ -1,3 +1,4 @@
+using Client;
 using System.Collections.Generic;
 using UnityEngine;
 namespace Shared
@@ -20,29 +21,16 @@ namespace Shared
 
         public static Item CreateNewItem(Item itemToAssign)
         {
-            Item newItem = new Item();
-            newItem.iD = itemToAssign.iD;
-            newItem.itemName = itemToAssign.itemName;
-            newItem.description = itemToAssign.description;
-            newItem.amount = itemToAssign.amount;
-            newItem.maxAmount = itemToAssign.maxAmount;
-            newItem.rarety = itemToAssign.rarety;
-            newItem.weight = itemToAssign.weight;
-            newItem.iconID = itemToAssign.iconID;
+            string baseStats = JsonUtility.ToJson(itemToAssign);
+            Item newItem = JsonUtility.FromJson<Item>(baseStats);
             return newItem;
         }
 
         public static Item CreateNewEmptyItem(Item itemToAssign)
         {
-            Item newItem = new Item();
-            newItem.iD = itemToAssign.iD;
-            newItem.itemName = itemToAssign.itemName;
-            newItem.description = itemToAssign.description;
+            string baseStats = JsonUtility.ToJson(itemToAssign);
+            Item newItem = JsonUtility.FromJson<Item>(baseStats);
             newItem.amount = 0;
-            newItem.maxAmount = itemToAssign.maxAmount;
-            newItem.rarety = itemToAssign.rarety;
-            newItem.weight = itemToAssign.weight;
-            newItem.iconID = itemToAssign.iconID;
             return newItem;
         }
 
