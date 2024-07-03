@@ -1,10 +1,5 @@
-using JetBrains.Annotations;
 using Shared;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 namespace Client
 {
@@ -63,7 +58,7 @@ namespace Client
                 enemyStats = statTemplate.creature.stats;
                 if (enemyStats.damage != 0)
                 {
-                    ThreadingMisc.Threader(delegate { this.AddHP(enemyStats.damage * -1); });
+                    AddHP(enemyStats.damage * -1);;
                 }
             }
         }

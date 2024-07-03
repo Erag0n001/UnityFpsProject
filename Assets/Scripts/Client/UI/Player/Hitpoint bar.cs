@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 namespace Client
 {
     public class Hitpointbar : MonoBehaviour

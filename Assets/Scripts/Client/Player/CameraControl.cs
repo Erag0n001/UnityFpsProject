@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 namespace Client
 {
     public class CameraControl : MonoBehaviour

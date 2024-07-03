@@ -1,6 +1,5 @@
 using Shared;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 namespace Client
 {
@@ -36,5 +35,6 @@ namespace Client
         public static Socializing Socializing;
         [Header("Misc")]
         public static UnityMainThreadDispatcher unityMainThreadDispatcher;
+        public static bool IsServer;
     }
 }

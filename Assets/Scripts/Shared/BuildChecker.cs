@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Server;
 using UnityEngine.SceneManagement;
@@ -14,10 +12,13 @@ public class BuildChecker : MonoBehaviour
             NetworkManager.Main();
             Application.targetFrameRate = 60;
             Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+            Client.MainManager.IsServer = true;
             SceneManager.LoadScene(2);
-        } else 
+        }
+        else
         {
             Printer.Log("Client application starting");
+            Client.MainManager.IsServer = false;
             SceneManager.LoadScene(1);
         }
     }

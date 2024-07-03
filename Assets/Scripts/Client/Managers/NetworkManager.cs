@@ -1,8 +1,4 @@
-﻿using System.Threading.Tasks;
-using System;
-using UnityEngine;
-using Shared;
-using System.Collections;
+﻿using Shared;
 namespace Client
 {
     public static class NetworkManager
@@ -16,9 +12,5 @@ namespace Client
             Printer.Log("Connection initiated");
             new Socializing(new(iPAddress, port));
         }
-        //public static IEnumerable GetInventoryFromServer()
-        //{
-        //    MainManager.Socializing.queue.Enqueue(new Packet => );
-        //}
     }
 }

@@ -1,12 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using NUnit.Framework;
 using Shared;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Rendering;
 namespace Client
 {
     public class RespawnManager : MonoBehaviour

@@ -2,9 +2,7 @@ namespace Server
 {
     using Shared;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using UnityEngine;
     public static class InventoryManager
     {
         public static Inventory CreateNewIDForInventory(Inventory inventory) 

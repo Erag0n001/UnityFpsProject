@@ -1,12 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using Unity.VisualScripting.Dependencies.NCalc;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.EventSystems;
 namespace Client
 {
     public class CharacterMovement : MonoBehaviour
