@@ -3,19 +3,23 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 namespace Shared
 {
     public static class Serializer
     {
-        public static object ConvertBytesToObject(byte[] bytes)
+        private static JsonSerializerSettings DefaultSettings => new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None };
+        public static T ConvertBytesToObject<T>(byte[] bytes)
         {
             MemoryStream memoryStream = new MemoryStream();
 
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            JsonSerializer serializer = JsonSerializer.Create(DefaultSettings);
 
-            memoryStream.Write(bytes, 0, bytes.Length);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            return binaryFormatter.Deserialize(memoryStream);
+            using (BsonReader reader = new BsonReader(memoryStream))
+            {
+                return serializer.Deserialize<T>(reader);
+            }
+            
         }
 
         //Serialize from and to packets
@@ -26,9 +30,13 @@ namespace Shared
 
             MemoryStream memoryStream = new MemoryStream();
 
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
+            JsonSerializer serializer = JsonSerializer.Create(DefaultSettings);
 
-            binaryFormatter.Serialize(memoryStream, toConvert);
+            using (BsonWriter writer = new BsonWriter(memoryStream))
+            {
+                serializer.Serialize(writer, toConvert);
+            }
+
             return memoryStream.ToArray();
         }
         //Serialize from and to strings

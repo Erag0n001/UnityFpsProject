@@ -47,10 +47,11 @@ namespace Server
                         Console.WriteLine(data);
                         Packet packet = Serializer.SerializeFromString<Packet>(data);
                         PacketManager.HandlePacket(packet, this);
-                        shouldClose = false;
                     }
+                    shouldClose = false;
                 }
             } catch(Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Listening failed");
             KillConnection();
         }
         public void Send()
@@ -68,6 +69,7 @@ namespace Server
                     }
                 }
             } catch (Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Sending failed");
             KillConnection();
         }
 
@@ -86,8 +88,10 @@ namespace Server
                     {
                         shouldClose = true;
                     }
+                    this.AddToQueue(Packet.CreateNewPacket("KeepAlivePacket", null));
                 }
             } catch(Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Timed out");
             KillConnection();
         }
 

@@ -1,10 +1,6 @@
 using Shared;
 using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Reflection;
-using UnityEditor.PackageManager;
-using UnityEngine;
 namespace Client 
 {
     public static class PacketManager
@@ -28,8 +24,9 @@ namespace Client
         }
         public static void RequestInventoryContent(Packet packet, Socializing client)
         {
-            Inventory inventory = (Inventory)Serializer.ConvertBytesToObject(packet.contents);
+            Inventory inventory = Serializer.ConvertBytesToObject<Inventory>(packet.contents);
             InventoryManager.UpdateInventory(inventory);
         }
+        public static void KeepAlivePacket(Packet packet, Socializing client) { }
     }
 }

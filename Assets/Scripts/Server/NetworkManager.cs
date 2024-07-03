@@ -27,8 +27,5 @@ namespace Server
             Console.WriteLine(newTCP.ToString());
             Socializing socializing = new Socializing(newTCP);
         }
-
-
-
-}
+    }
 }

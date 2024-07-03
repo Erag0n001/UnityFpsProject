@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace Client
@@ -10,7 +7,7 @@ namespace Client
         public void PlayButtonPressed()
         {
             NetworkManager.Main();
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         }
     }
 }

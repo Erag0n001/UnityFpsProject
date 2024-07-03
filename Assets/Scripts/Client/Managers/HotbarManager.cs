@@ -13,7 +13,6 @@ namespace Client
         private void Awake()
         {
             MainManager.playerHotbar = this;
-            NetworkManager.Main();
         }
 
         public void UseItem()

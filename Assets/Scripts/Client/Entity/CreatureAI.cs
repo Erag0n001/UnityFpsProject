@@ -101,7 +101,6 @@ namespace Client
             if (creature.stats.wandering && creature.stats.wanderingTick >= 5)
             {
                 creature.stats.wanderingPos = new Vector3(UnityEngine.Random.Range(gameObject.transform.position.x - 10f, gameObject.transform.position.x + 10f), gameObject.transform.position.y, UnityEngine.Random.Range(gameObject.transform.position.z - 10f, gameObject.transform.position.z + 10f));
-                Printer.Log($"{creature.stats.wanderingPos}");
                 pathFinding.SetDestination(creature.stats.wanderingPos);
                 creature.stats.wanderingTick = 0;
             }

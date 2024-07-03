@@ -47,11 +47,12 @@ namespace Client
                     {
                         Packet packet = Serializer.SerializeFromString<Packet>(data);
                         PacketManager.HandlePacket(packet, this);
-                        shouldClose = false;
                     }
+                    shouldClose = false;
                 }
             }
             catch (Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Listening failed");
             KillConnection();
         }
         public void Send()
@@ -67,9 +68,11 @@ namespace Client
                         streamWriter.WriteLine(data);
                         streamWriter.Flush();
                     }
+                    shouldClose = false;
                 }
             }
             catch (Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Sending failed");
             KillConnection();
         }
 
@@ -88,16 +91,21 @@ namespace Client
                     {
                         shouldClose = true;
                     }
+                    MainManager.Socializing.AddToQueue(Packet.CreateNewPacket("KeepAlivePacket",null));
                 }
             }
             catch (Exception ex) { Printer.LogError(ex.ToString()); }
+            Printer.LogWarning("Timed out");
             KillConnection();
         }
 
-        public void KillConnection()
+        public void KillConnection() 
         {
-            connection.Close();
-            connection.Dispose();
+            if(connection != null)
+            {
+                connection.Close();
+                connection.Dispose();
+            }
         }
     }
 }
