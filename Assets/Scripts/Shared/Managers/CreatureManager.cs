@@ -52,10 +52,8 @@ namespace Shared
 
         public static Creature CreateCreature(Creature baseCreature) 
         {
-            Printer.Log(baseCreature.stats.hitPoint.ToString());
             string baseStats = JsonUtility.ToJson(baseCreature);
             Creature creature = JsonUtility.FromJson<Creature>(baseStats);
-            Printer.Log(creature.stats.hitPoint.ToString());
             return creature;
         }
     }
