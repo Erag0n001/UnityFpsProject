@@ -4,7 +4,7 @@ namespace Client
 {
     public class LootManager : MonoBehaviour
     {
-
+        public GameObject LootParent;
         public void Awake()
         {
             MainManager.lootManager = this;
@@ -18,6 +18,7 @@ namespace Client
             loot = GameObject.Instantiate(loot);
             loot.GetComponent<Looting>().containedItem = item;
             loot.transform.position = spawnLocation;
+            loot.transform.parent = LootParent.transform;
         }
     }
 }

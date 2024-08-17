@@ -116,17 +116,15 @@ namespace Client
             }
         }
 
-        public static void RequestInventoryFromServer(Inventory inventory) 
+        public static void RequestInventoryFromServer(Inventory inventoryToRequest) 
         {
-            inventoryRequestQueue.Enqueue(inventory);
-            Printer.Log(inventoryRequestQueue.Count.ToString());
-            MainManager.Socializing.AddToQueue(Packet.CreateNewPacket("RequestInventoryContent", inventory));
+            inventoryRequestQueue.Enqueue(inventoryToRequest);
+            MainManager.Socializing.AddToQueue(new Packet("RequestInventoryContent", new InventoryPacket() { inventory = new SerializableInventory(inventoryToRequest) }));
         }
         public static void AddItem(Item item, Inventory inventory)
         {
             inventoryRequestQueue.Enqueue(inventory);
-            Printer.Log(inventoryRequestQueue.Count.ToString());
-            MainManager.Socializing.AddToQueue(Packet.CreateNewPacket("AddItemToInventory", new List<object> {inventory, item}));
+            MainManager.Socializing.AddToQueue(new Packet("AddItemToInventory",new InventoryAddItem(){ inventory = new SerializableInventory(inventory), item = item}));
         }
 
     }

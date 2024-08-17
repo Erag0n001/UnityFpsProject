@@ -5,7 +5,7 @@ namespace Server
     {
         public void PlayButtonPressed()
         {
-            NetworkManager.Main();
+            MainManager.Startup();
         }
     }
 }

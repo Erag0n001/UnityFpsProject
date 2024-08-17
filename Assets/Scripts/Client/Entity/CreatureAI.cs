@@ -1,23 +1,47 @@
 using Shared;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 namespace Client
 {
     public class CreatureAI : MonoBehaviour
     {
+        public int creatureID;
         public Creature creature;
         public NavMeshAgent pathFinding;
+        public Vector3 lastPos;
+        public Quaternion lastRot;
         void Start()
         {
+            creature = CreatureManager.FindCreature(creatureID);
+            if (creature == null){
+                Printer.LogError($"Could not find creature' {creatureID}' for {gameObject.name}, this should never happen, deleting...");
+                Destroy(gameObject);
+            }
+            creature.creatureAI = this;
+            if (MainManager.IsServer)
+            {
+                SetStats();
+            } else 
+            {
+                Destroy(gameObject.GetComponent<NavMeshAgent>());
+            }
+        }
+        //Sets initial stats
+        void SetStats() 
+        {
+            gameObject.GetComponentInChildren<SphereCollider>().radius = creature.stats.agroRange;
             pathFinding = GetComponent<NavMeshAgent>();
             pathFinding.speed = creature.stats.baseSpeed;
             if (creature.stats.aIType == CreatureStats.AIType.Aggressive)
             {
                 AgroRange();
             }
-            creature.stats.wandering = true;
+            creature.stats.status = CreatureStats.Status.Wandering;
+            creature.stats.wanderingPos = Converter.Vector3UnityToVector3(transform.position);
         }
-
         void AgroRange()
         {
             creature.stats.agroRangeCollider = gameObject.GetComponentInChildren<SphereCollider>();
@@ -26,29 +50,72 @@ namespace Client
 
         void Update()
         {
+            if (MainManager.IsServer)
+            {
+                ServerTick();
+            }
+            else
+            {
+                ClientTick();
+            }
+        }
+
+        public void ServerTick() 
+        {
+            NeedsUpdating();
             //Check if creature was hit
             HitCheck();
             //Resets the AI if the attacker happens to die
             if (creature.stats.attacker == null)
             {
-                creature.stats.fleeing = false;
-                creature.stats.aggressive = false;
-                creature.stats.wandering = true;
+                creature.stats.status = CreatureStats.Status.Wandering;
             }
-            //Wanders creature around
-            Wander();
-            if (creature.stats.aggressive)
+            //Set the position of the creatures in it's data container
+            UpdatePos();
+            //Finds location to pathfind to
+            switch (creature.stats.status)
             {
-                Attack();
+                case CreatureStats.Status.Wandering: FindWanderPos(); break;
+                case CreatureStats.Status.Attacking: Attack(); break;
+                case CreatureStats.Status.Fleeing: Flee(); break;
             }
-            if (creature.stats.fleeing)
-            {
-                Flee();
-            }
+            //Pathfind to location
+            StartPathfinding();
             //Check is creature is dead
             StatChecks();
         }
 
+        public void NeedsUpdating() 
+        {
+            if(Vector3.Distance(transform.position,lastPos) > 0.1f) 
+            {
+                creature.stats.needsUpdating = true;
+            }
+            if(Quaternion.Angle(transform.rotation,lastRot) > 1) 
+            {
+                creature.stats.needsUpdating = true;
+            }
+            lastPos = transform.position;
+            lastRot = transform.rotation;
+        }
+        public void ClientTick() 
+        {
+            if (creature.stats.receivedPacketMove)
+            {
+                creature.stats.receivedPacketMove = false;
+                StartCoroutine(Lerp(Converter.Vector3ToUnityVector3(creature.stats.currentPosition)));
+                StartCoroutine(LerpRot(Converter.Vector4ToQuaternion(creature.stats.currentRotation)));
+            }
+            if (creature.stats.receivedPacketDeath) 
+            {
+                DestroyCreature();
+            }
+        }
+        public void UpdatePos()
+        {
+            creature.stats.currentPosition = Converter.Vector3UnityToVector3(transform.position);
+            creature.stats.currentRotation = Converter.QuaternionToVector4(transform.rotation);
+        }
         public void HitCheck()
         {
             if (creature.stats.hit)
@@ -56,15 +123,15 @@ namespace Client
                 switch (creature.stats.aIType)
                 {
                     case CreatureStats.AIType.PassiveFlee:
-                        creature.stats.fleeing = true;
+                        creature.stats.status = CreatureStats.Status.Fleeing;
                         pathFinding.speed = creature.stats.sprintingSpeed;
                         break;
                     case CreatureStats.AIType.Neutral:
-                        creature.stats.aggressive = true;
+                        creature.stats.status = CreatureStats.Status.Attacking;
                         pathFinding.speed = creature.stats.sprintingSpeed;
                         break;
                     case CreatureStats.AIType.Aggressive:
-                        creature.stats.aggressive = true;
+                        creature.stats.status = CreatureStats.Status.Attacking;
                         pathFinding.speed = creature.stats.sprintingSpeed;
                         break;
                 }
@@ -75,13 +142,22 @@ namespace Client
         {
             if (creature.stats.hitPoint <= 0)
             {
-                MainManager.lootManager.SpawnLoot(gameObject.transform.position, creature.stats.enemyQuality);
-                Destroy(gameObject);
+                DestroyCreature();
             }
             if (creature.stats.immunityFrames > 0)
             {
                 creature.stats.immunityFrames -= 1 * Time.deltaTime;
             }
+        }
+
+        public void DestroyCreature() 
+        {
+            Printer.Log(gameObject.transform.position.ToString());
+            Printer.Log($"Killed creature with id {creatureID} and name {this.gameObject.name}");
+            MainManager.lootManager.SpawnLoot(gameObject.transform.position, creature.stats.enemyQuality);
+            CreatureManager.deadCreatures.Add(creature.instanceId);
+            MainManager.creatureList.Remove(creature);
+            Destroy(this.gameObject);
         }
         public void AddHP(float modifier)
         {
@@ -93,23 +169,54 @@ namespace Client
             }
         }
 
-        void Wander()
+        void FindWanderPos()
         {
             creature.stats.wanderingTick += 1 * Time.deltaTime;
-            if (creature.stats.wandering && creature.stats.wanderingTick >= 5)
+            if (creature.stats.status == CreatureStats.Status.Wandering && creature.stats.wanderingTick >= 5)
             {
-                creature.stats.wanderingPos = new Vector3(UnityEngine.Random.Range(gameObject.transform.position.x - 10f, gameObject.transform.position.x + 10f), gameObject.transform.position.y, UnityEngine.Random.Range(gameObject.transform.position.z - 10f, gameObject.transform.position.z + 10f));
-                pathFinding.SetDestination(creature.stats.wanderingPos);
+                creature.stats.wanderingPos = new SerializableVector3(UnityEngine.Random.Range(gameObject.transform.position.x - 10f, gameObject.transform.position.x + 10f), gameObject.transform.position.y, UnityEngine.Random.Range(gameObject.transform.position.z - 10f, gameObject.transform.position.z + 10f));
                 creature.stats.wanderingTick = 0;
             }
+        }
+
+        public void StartPathfinding()
+        {
+            pathFinding.SetDestination(Converter.Vector3ToUnityVector3(creature.stats.wanderingPos));
+        }
+
+        public IEnumerator LerpRot(Quaternion rotation) 
+        {
+            Quaternion startRot = transform.rotation;
+
+            float currentTime = 0f;
+            float endTime = 0.250f;
+            while (currentTime < endTime)
+            {
+                currentTime += Time.deltaTime;
+                transform.rotation = Quaternion.Lerp(startRot, rotation, currentTime / endTime);
+                yield return null;
+            }
+            transform.rotation = rotation;
+        }
+        public IEnumerator Lerp(Vector3 v) 
+        {
+            float currentTime = 0f;
+            float endTime = 0.250f;
+            Vector3 startPos = gameObject.transform.position;
+            while (currentTime < endTime) 
+            {
+                currentTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPos, v, currentTime / endTime);
+                yield return null;
+            }
+            transform.position = v;
         }
         //Passive
         void Flee()
         {
             if (Vector3.Distance(gameObject.transform.position, creature.stats.attacker.transform.position) > 30)
             {
-                creature.stats.fleeing = false;
-                creature.stats.wandering = true;
+                creature.stats.status = CreatureStats.Status.Wandering;
                 pathFinding.speed = creature.stats.baseSpeed;
             }
             else
@@ -124,7 +231,7 @@ namespace Client
                     gameObject.transform.forward = creature.stats.attacker.transform.forward;
                 }
                 targetPos = gameObject.transform.position + gameObject.transform.forward * 5;
-                pathFinding.SetDestination(targetPos);
+                creature.stats.wanderingPos = Converter.Vector3UnityToVector3(targetPos);
             }
         }
         //Aggressive
@@ -132,13 +239,12 @@ namespace Client
         {
             if (Vector3.Distance(gameObject.transform.position, creature.stats.attacker.transform.position) > 30)
             {
-                creature.stats.aggressive = false;
-                creature.stats.wandering = true;
+                creature.stats.status = CreatureStats.Status.Wandering;
                 pathFinding.speed = creature.stats.baseSpeed;
             }
             else
             {
-                pathFinding.SetDestination(creature.stats.attacker.transform.position);
+                creature.stats.wanderingPos = Converter.Vector3UnityToVector3(creature.stats.attacker.transform.position);
             }
         }
 
@@ -150,16 +256,14 @@ namespace Client
                     if (enemyObject.tag == "Player")
                     {
                         creature.stats.isAttackerPlayer = true;
-                        creature.stats.aggressive = true;
+                        creature.stats.status = CreatureStats.Status.Attacking;
                         creature.stats.attacker = enemyObject;
-                        creature.stats.wandering = false;
                     }
                     if (enemyObject.CompareTag("Entity"))
                     {
                         creature.stats.isAttackerPlayer = false;
-                        creature.stats.aggressive = true;
+                        creature.stats.status = CreatureStats.Status.Attacking;
                         creature.stats.attacker = enemyObject;
-                        creature.stats.wandering = false;
                     }
                 }
             }

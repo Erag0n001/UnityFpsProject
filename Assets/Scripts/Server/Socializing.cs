@@ -87,7 +87,7 @@ namespace Server
                     {
                         shouldClose = true;
                     }
-                    this.AddToQueue(Packet.CreateNewPacket("KeepAlivePacket", null));
+                    this.AddToQueue(new Packet("KeepAlivePacket", null));
                 }
             } catch(Exception ex) { Printer.LogError(ex.ToString()); }
             Printer.LogWarning("Timed out");
@@ -98,6 +98,9 @@ namespace Server
         {
             connection.Close();
             connection.Dispose();
+            GameClient gameClient = new GameClient();
+            gameClient.socializing = this;
+            MainManager.clientList.Remove(gameClient);
         }
     }
 }

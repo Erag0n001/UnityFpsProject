@@ -1,4 +1,7 @@
+using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Numerics;
 namespace Shared 
 {
     [Serializable]
@@ -8,13 +11,44 @@ namespace Shared
         public byte[] contents;
         public bool requiresMainThread; 
 
-        public static Packet CreateNewPacket(string header, object content, bool mainThread = false) 
+        public Packet(string header, object content, bool mainThread = false) 
         {
-            Packet packet = new Packet();
-            packet.header = header;
-            packet.contents = Serializer.ConvertObjectToBytes(content);
-            packet.requiresMainThread = mainThread;
-            return packet;
+            this.header = header;
+            this.contents = Serializer.ConvertObjectToBytes(content);
+            this.requiresMainThread = mainThread;
         }
+    }
+
+    public class KeepAlivePacket 
+    {
+
+    }
+    [Serializable]
+    public class InventoryPacket
+    {
+        public SerializableInventory inventory;
+    }
+    [Serializable]
+    public class InventoryAddItem 
+    {
+        public SerializableInventory inventory;
+        public Item item;
+    }
+    [Serializable]
+    public class CreaturePacket
+    {
+        public Creature creature;
+    }
+    public class PlayerPacket 
+    {
+        public PlayerStats playerStats;
+        public SerializableVector3 position;
+        public SerializableVector4 rotation;
+    }
+    [Serializable]
+    public class SyncAllCreaturesPacket 
+    {
+        public List<int> deadCreatures = new List<int>();
+        public CreaturePacket[] creatures = new CreaturePacket[0];
     }
 }

@@ -15,13 +15,10 @@ namespace Client
         private float playerRespawnCooldown;
 
 
-        int selectedNumber;
-        GameObject selectedPad;
-        GameObject selectedCreature;
         private void Awake()
         {
             MainManager.respawnManager = this;
-            creatureList = CreatureManager.creatureList;
+            creatureList = Shared.CreatureManager.creatureList;
             playerPrefab = Resources.Load<GameObject>("Prefab/Entities/Player/Player");
         }
 
@@ -34,11 +31,14 @@ namespace Client
         }
         void Update()
         {
-            entityRespawnCooldown += 1 * Time.deltaTime;
-            if (entityRespawnCooldown >= 5)
+            if (MainManager.IsServer) 
             {
-                entityRespawnCooldown = 0;
-                EntityRespawn();
+                entityRespawnCooldown += 1 * Time.deltaTime;
+                if (entityRespawnCooldown >= 5)
+                {
+                    entityRespawnCooldown = 0;
+                    EntityRespawn();
+                }
             }
             if (!MainManager.isPlayerAlive)
             {
@@ -52,31 +52,54 @@ namespace Client
         }
 
 
-        void EntityRespawn()
+        public void EntityRespawn(Creature creature = null, Vector3? spawnPosition = null)
         {
-            selectedNumber = Random.Range(0, entityRespawnPad.Length);
-            selectedPad = entityRespawnPad[selectedNumber];
-            selectedNumber = Random.Range(0, creatureList.Count);
-            Creature creature = CreatureManager.CreateCreature(CreatureManager.creatureList[selectedNumber]);
-            selectedCreature = CreatureManager.FindPrefab(creatureList[selectedNumber].uniqueName);
-            selectedCreature = Object.Instantiate(selectedCreature, selectedPad.transform.position, Quaternion.identity, aliveList.transform);
-            selectedCreature.GetComponent<CreatureAI>().creature = creature;
-            EntitySizeRandomizer(selectedCreature);
+            int selectedNumber;
+            int id = 0;
+            if (creature == null)
+            {
+                selectedNumber = Random.Range(0, creatureList.Count);
+                creature = Shared.CreatureManager.CreateCreature(Shared.CreatureManager.creatureList[selectedNumber]);
+            } else 
+            {
+                id = creature.instanceId;
+            }
+
+            if (spawnPosition == null)
+            {
+                selectedNumber = Random.Range(0, entityRespawnPad.Length);
+                spawnPosition = entityRespawnPad[selectedNumber].transform.position;
+            }
+            if (MainManager.IsServer)
+            {
+                MainManager.currentCreatureIDCount += 1;
+                creature.instanceId = MainManager.currentCreatureIDCount;
+                id = MainManager.currentCreatureIDCount;
+            }
+            MainManager.creatureList.Add(creature);
+            MainManager.unityMainThreadDispatcher.Enqueue(() => 
+            {
+                SpawnCreature(creature, spawnPosition.Value);
+            });
         }
 
-        void EntitySizeRandomizer(GameObject selectedCreature)
+        public void SpawnCreature(Creature creature, Vector3 spawnPosition) 
         {
+            GameObject selectedCreature = Shared.CreatureManager.FindPrefab(creature.uniqueName);
             CreatureAI creatureAI = selectedCreature.GetComponent<CreatureAI>();
-            float sizeMultiplier = Random.Range(creatureAI.creature.stats.maxSize, creatureAI.creature.stats.minSize);
-            creatureAI.creature.stats.hitPoint *= sizeMultiplier;
-            creatureAI.creature.stats.damage *= sizeMultiplier;
-            if (creatureAI.creature.stats.aIType == CreatureStats.AIType.Aggressive)
+            creatureAI.creatureID = creature.instanceId;
+            selectedCreature = UnityEngine.Object.Instantiate(selectedCreature, spawnPosition, Quaternion.identity, aliveList.transform);
+            selectedCreature.name = creature.uniqueName + " " + creature.instanceId;
+        }
+        void CreatureStatRandomizer(Creature creature)
+        {
+            float statMultiplier = Random.Range(creature.stats.maxSize, creature.stats.minSize);
+            creature.stats.hitPoint *= statMultiplier;
+            creature.stats.damage *= statMultiplier;
+            if (creature.stats.aIType == CreatureStats.AIType.Aggressive)
             {
-                creatureAI.creature.stats.agroRange *= sizeMultiplier;
-                selectedCreature.GetComponentInChildren<SphereCollider>().radius = creatureAI.creature.stats.agroRange;
+                creature.stats.agroRange *= statMultiplier;
             }
-            selectedCreature.GetComponent<NavMeshAgent>().speed *= sizeMultiplier;
-            selectedCreature.transform.localScale *= sizeMultiplier;
         }
         void playerRespawn()
         {

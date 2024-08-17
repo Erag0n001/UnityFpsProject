@@ -8,7 +8,7 @@ namespace Shared
         private static JsonSerializerSettings DefaultSettings => new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.None };
         public static T ConvertBytesToObject<T>(byte[] bytes)
         {
-            MemoryStream memoryStream = new MemoryStream();
+            MemoryStream memoryStream = new MemoryStream(bytes);
 
             JsonSerializer serializer = JsonSerializer.Create(DefaultSettings);
 

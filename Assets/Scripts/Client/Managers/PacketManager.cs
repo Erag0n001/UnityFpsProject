@@ -1,5 +1,6 @@
 using Shared;
 using System;
+using System.Numerics;
 using System.Reflection;
 namespace Client 
 {
@@ -9,7 +10,6 @@ namespace Client
         {
             Action toDo = () =>
             {
-                Printer.LogWarning(packet.header);
                 Type toUse = typeof(PacketManager);
                 MethodInfo methodInfo = toUse.GetMethod(packet.header);
                 methodInfo.Invoke(packet.header, new object[] { packet , client });
@@ -24,8 +24,13 @@ namespace Client
         }
         public static void RequestInventoryContent(Packet packet, Socializing client)
         {
-            Inventory inventory = Serializer.ConvertBytesToObject<Inventory>(packet.contents);
-            InventoryManager.UpdateInventory(inventory);
+            InventoryPacket inventory = Serializer.ConvertBytesToObject<InventoryPacket>(packet.contents);
+            InventoryManager.UpdateInventory(Converter.SerializableInventoryToInventory(inventory.inventory));
+        }
+        public static void SyncCreaturesFromServer(Packet packet, Socializing clientt)
+        {
+            SyncAllCreaturesPacket syncAllCreaturesPacket = Serializer.ConvertBytesToObject<SyncAllCreaturesPacket>(packet.contents);
+            CreatureManager.SyncAllCreaturesFromServer(syncAllCreaturesPacket);
         }
         public static void KeepAlivePacket(Packet packet, Socializing client) { }
     }

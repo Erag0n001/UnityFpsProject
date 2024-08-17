@@ -5,20 +5,6 @@ namespace Client
 {
     public class PlayerStatManager : MonoBehaviour
     {
-        [Serializable]
-        public class Stats
-        {
-            public float maxHitpoint;
-            public float hitPoint;
-            public float damage;
-            public float baseMovementSpeed;
-            public float movementSpeed;
-            public float maxStamina;
-            public float stamina;
-            public float baseJumpPower;
-            public float jumpPower;
-            [NonSerialized] public float immunityFrames;
-        }
         public Stats stats;
         private CreatureStats enemyStats;
         private GameObject enemy;

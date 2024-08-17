@@ -1,4 +1,8 @@
-﻿using Shared;
+﻿using NUnit.Framework.Internal;
+using Shared;
+using System.Threading;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 namespace Client
 {
     public static class NetworkManager
@@ -7,10 +11,13 @@ namespace Client
         public static int port = int.Parse("25555");
 
         public static Socializing listener;
-        public static void Main()
+        public static void StartConnections()
         {
-            Printer.Log("Connection initiated");
-            new Socializing(new(iPAddress, port));
+            if (!Client.MainManager.IsServer)
+            {
+                Printer.Log("Connection initiated");
+                new Socializing(new(iPAddress, port));
+            }
         }
     }
 }

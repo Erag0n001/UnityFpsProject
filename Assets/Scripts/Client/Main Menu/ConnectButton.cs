@@ -6,7 +6,7 @@ namespace Client
     {
         public void PlayButtonPressed()
         {
-            NetworkManager.Main();
+            NetworkManager.StartConnections();
             SceneManager.LoadScene(2);
         }
     }

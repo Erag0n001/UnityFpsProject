@@ -91,7 +91,7 @@ namespace Client
                     {
                         shouldClose = true;
                     }
-                    MainManager.Socializing.AddToQueue(Packet.CreateNewPacket("KeepAlivePacket",null));
+                    MainManager.Socializing.AddToQueue(new Packet("KeepAlivePacket", null));
                 }
             }
             catch (Exception ex) { Printer.LogError(ex.ToString()); }

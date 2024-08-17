@@ -1,6 +1,7 @@
+using Client;
 using System;
+using System.Numerics;
 using UnityEngine;
-
 namespace Shared
 {
     [Serializable]
@@ -10,6 +11,7 @@ namespace Shared
         public string instanceName;
         public string uniqueName;
         public CreatureStats stats = new CreatureStats();
+        [NonSerialized] public CreatureAI creatureAI;
     }
 
     [Serializable]
@@ -25,20 +27,26 @@ namespace Shared
         public float sprintingSpeed;
         public AIType aIType;
         public enum AIType { PassiveFlee, Passive, Neutral, Aggressive };
-        public bool hit;
-        public bool isAttackerPlayer;
-        public GameObject attacker = null;
+        [NonSerialized] public bool hit;
+        [NonSerialized] public bool isAttackerPlayer;
+        [NonSerialized] public GameObject attacker = null;
         
-        public bool wandering;
-        public Vector3 wanderingPos;
-        public float wanderingTick;
+        public SerializableVector3 wanderingPos;
+        [NonSerialized] public float wanderingTick;
 
-        public bool fleeing;
+        public SerializableVector3 currentPosition;
+        public SerializableVector4 currentRotation;
 
-        public bool aggressive;
-        public SphereCollider agroRangeCollider = null;
+        [NonSerialized] public Status status;
+        public enum Status { Wandering, Attacking, Fleeing};
 
-        public float immunityFrames;
+        [NonSerialized] public SphereCollider agroRangeCollider = null;
+
+        [NonSerialized] public float immunityFrames;
+
+        public bool receivedPacketMove;
+        public bool receivedPacketDeath;
+        public bool needsUpdating;
     }
     [Serializable]
     public class CreatureBase

@@ -36,4 +36,11 @@ namespace Client
                 JsonUtility.ToJson(new CreatureBase(), true));
         }
     }
-}
+    class WindowsClientBuilder
+        {
+            static void ProductionBuild()
+            {
+
+            }
+        }
+    }

@@ -32,10 +32,9 @@ namespace Client
     public class UnityMainThreadDispatcher : MonoBehaviour
     {
         private static readonly Queue<Action> _executionQueue = new Queue<Action>();
-
-        private void Awake() 
+        private void Awake()
         {
-            DontDestroyOnLoad(this.gameObject); 
+            DontDestroyOnLoad(this.gameObject);
             MainManager.unityMainThreadDispatcher = this;
         }
 

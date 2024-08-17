@@ -15,8 +15,11 @@ namespace Client
         public static GameObject[] lootList;
 
         [Header("Entities")]
-        public static GameObject[] entityCreatureList;
+        public static GameObject[] BaseCreatureList;
         public static Inventory[] inventoryList;
+        public static List<Creature> creatureList = new List<Creature>();
+        public static int previousCreatureCount = 0;
+        public static int currentCreatureIDCount = 0;
 
         [Header("Player")]
         public static GameObject latestPlayerDeadBody;
