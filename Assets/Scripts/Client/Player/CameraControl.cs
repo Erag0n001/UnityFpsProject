@@ -21,7 +21,7 @@ namespace Client
         }
 
         // Update is called once per frame
-        void FixedUpdate()
+        public void FixedUpdate()
         {
             if (!isPlayerBusy)
             {

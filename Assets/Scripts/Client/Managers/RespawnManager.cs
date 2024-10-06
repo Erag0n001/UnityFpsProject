@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using System.Threading;
+using System.Collections;
 using Shared;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 namespace Client
 {
     public class RespawnManager : MonoBehaviour
     {
         private List<Creature> creatureList = new List<Creature>();
         private GameObject playerPrefab;
+        private GameObject fakePlayerPrefab;
         private GameObject[] entityRespawnPad;
         private GameObject[] playerRespawnPads;
         private GameObject aliveList;
@@ -20,6 +24,7 @@ namespace Client
             MainManager.respawnManager = this;
             creatureList = Shared.CreatureManager.creatureList;
             playerPrefab = Resources.Load<GameObject>("Prefab/Entities/Player/Player");
+            fakePlayerPrefab = Resources.Load<GameObject>("Prefab/Entities/Player/FakePlayer");
         }
 
         void Start()
@@ -27,7 +32,7 @@ namespace Client
             aliveList = GameObject.Find("Alive");
             entityRespawnPad = GameObject.FindGameObjectsWithTag("EntityRespawnPad");
             playerRespawnPads = GameObject.FindGameObjectsWithTag("PlayerRespawnPad");
-            playerRespawn();
+            MainManager.Socializing.AddToQueue(new Packet("RequestPlayerBody", null));
         }
         void Update()
         {
@@ -38,15 +43,6 @@ namespace Client
                 {
                     entityRespawnCooldown = 0;
                     EntityRespawn();
-                }
-            }
-            if (!MainManager.isPlayerAlive)
-            {
-                playerRespawnCooldown += 1 * Time.deltaTime;
-                if (playerRespawnCooldown >= 5)
-                {
-                    playerRespawn();
-                    playerRespawnCooldown = 0;
                 }
             }
         }
@@ -101,18 +97,52 @@ namespace Client
                 creature.stats.agroRange *= statMultiplier;
             }
         }
-        void playerRespawn()
+
+        public IEnumerator PlayerRespawnCooldown(Player player) 
         {
-            MainManager.alivePlayer = Object.Instantiate(playerPrefab, playerRespawnPads[Random.Range(0, playerRespawnPads.Length)].transform.position, Quaternion.identity, aliveList.transform);
-            MainManager.playerStatManager = MainManager.alivePlayer.gameObject.GetComponent<PlayerStatManager>();
-            MainManager.playerMovement = MainManager.alivePlayer.gameObject.GetComponent<CharacterMovement>();
-            MainManager.isPlayerAlive = true;
-            Camera camera = MainManager.alivePlayer.transform.Find("Head").Find("Camera").gameObject.GetComponent<Camera>();
-            camera.enabled = true;
-            if (MainManager.latestPlayerDeadBody != null)
+            Thread.Sleep(5000);
+            player.stats.isAlive = true;
+            PlayerRespawn(player);
+            yield return null;
+        }
+        public void PlayerRespawn(Player player = null)
+        {
+            if(player == null) 
             {
-                GameObject deadCamera = MainManager.latestPlayerDeadBody.transform.Find("PlayerDeadCamera").gameObject;
-                GameObject.Destroy(deadCamera);
+                player = new Player();
+                MainManager.currentCreatureIDCount++;
+                player.id = MainManager.currentCreatureIDCount;
+            }
+            if (player.isMainPlayer)
+            {
+                MainManager.playerStatManager = MainManager.alivePlayer.gameObject.GetComponent<PlayerStatManager>();
+                MainManager.playerMovement = MainManager.alivePlayer.gameObject.GetComponent<CharacterMovement>();
+                MainManager.isPlayerAlive = true;
+                Camera camera = MainManager.alivePlayer.transform.Find("Head").Find("Camera").gameObject.GetComponent<Camera>();
+                camera.enabled = true;
+                if (MainManager.latestPlayerDeadBody != null)
+                {
+                    GameObject deadCamera = MainManager.latestPlayerDeadBody.transform.Find("PlayerDeadCamera").gameObject;
+                    GameObject.Destroy(deadCamera);
+                }
+
+            } else 
+            {
+                FakePlayerSpawn(player);
+            }
+            if (!MainManager.playerList.Any(c => c.id == player.id))
+            {
+                MainManager.playerList.Add(player);
+            }
+        }
+
+        public void FakePlayerSpawn(Player player) 
+        {
+            GameObject fakePlayer = GameObject.Instantiate(fakePlayerPrefab);
+            fakePlayerPrefab.GetComponent<PlayerData>().player = player;
+            if (!MainManager.playerList.Any(c => c.id == player.id))
+            {
+                MainManager.playerList.Add(player);
             }
         }
     }

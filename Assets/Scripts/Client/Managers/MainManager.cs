@@ -18,10 +18,12 @@ namespace Client
         public static GameObject[] BaseCreatureList;
         public static Inventory[] inventoryList;
         public static List<Creature> creatureList = new List<Creature>();
+        public static List<Player> playerList = new List<Player>();
         public static int previousCreatureCount = 0;
         public static int currentCreatureIDCount = 0;
 
         [Header("Player")]
+        public static Player mainPlayer;
         public static GameObject latestPlayerDeadBody;
         public static GameObject playerPrefab;
         public static GameObject alivePlayer;
@@ -31,7 +33,6 @@ namespace Client
         public static HotbarManager playerHotbar;
         public static Quaternion PlayerRot;
         public static bool isPlayerInInventory;
-        public static Inventory playerInventory = new Inventory() { id = -1 };
         public static CameraControl playerCameraControl;
 
         [Header("Network")]

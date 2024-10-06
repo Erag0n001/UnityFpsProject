@@ -39,16 +39,22 @@ namespace Shared
     {
         public Creature creature;
     }
-    public class PlayerPacket 
-    {
-        public PlayerStats playerStats;
-        public SerializableVector3 position;
-        public SerializableVector4 rotation;
-    }
     [Serializable]
     public class SyncAllCreaturesPacket 
     {
         public List<int> deadCreatures = new List<int>();
         public CreaturePacket[] creatures = new CreaturePacket[0];
+    }
+    [Serializable]
+    public class PlayerPacket
+    {
+        public Player player;
+        public SerializableVector3 position;
+        public SerializableVector4 rotation;
+    }
+    public class SyncAllPlayersPacket 
+    {
+        public PlayerPacket[] players = new PlayerPacket[0];
+        public List<int> deadPlayers = new List<int>();
     }
 }

@@ -10,7 +10,9 @@ namespace Client
     static class CreatureManager
     {
         static public List<int> deadCreatures = new List<int>();
+        static public List<int> deadPlayers = new List<int>();
         static SyncAllCreaturesPacket packet;
+
         public static SyncAllCreaturesPacket SyncCreaturesWithClient(GameClient client)
         {
             packet = new SyncAllCreaturesPacket();
@@ -22,7 +24,7 @@ namespace Client
                     CreaturePacket creaturePacket = new CreaturePacket();
                     creaturePacket.creature = creature;
                     creaturelist.Add(creaturePacket);
-                    creature.creatureAI.creature.stats.needsUpdating = false;
+                    creature.creatureAI.creature.needsUpdating = false;
                     
                 //}
             }
@@ -37,7 +39,8 @@ namespace Client
             packet.creatures = creaturelist.ToArray();
             return packet;
         }
-        public static void SyncAllCreaturesFromServer(SyncAllCreaturesPacket syncAllCreaturesPacket) 
+
+        public static void SyncCreaturesFromServer(SyncAllCreaturesPacket syncAllCreaturesPacket) 
         {
             List<CreaturePacket> incomingCreatureList = syncAllCreaturesPacket.creatures.ToList<CreaturePacket>();
             for (int i = 0; incomingCreatureList.Count > i; i++)
@@ -50,7 +53,7 @@ namespace Client
                     {
                         Creature oldCreature = MainManager.creatureList[indexToReplace];
                         MainManager.creatureList[indexToReplace] = incomingCreatureList[i].creature;
-                        MainManager.creatureList[indexToReplace].stats.receivedPacketMove = true;
+                        MainManager.creatureList[indexToReplace].receivedPacketMove = true;
                         MainManager.creatureList[indexToReplace].creatureAI = oldCreature.creatureAI;
                         MainManager.creatureList[indexToReplace].creatureAI.creature = MainManager.creatureList[indexToReplace];
                     }
@@ -70,7 +73,7 @@ namespace Client
                     try
                     {
                         Creature creature = FindCreature(id);
-                        creature.stats.receivedPacketDeath = true;
+                        creature.receivedPacketDeath = true;
                     }
                     catch (Exception ex)
                     {
@@ -88,6 +91,58 @@ namespace Client
                 creature = matchingCreatures.First();
             }
             return creature;
+        }
+
+        public static SyncAllPlayersPacket SyncPlayersWithClient(GameClient client)
+        {
+            SyncAllPlayersPacket packet = new SyncAllPlayersPacket();
+            List<PlayerPacket> playerList = new List<PlayerPacket>();
+            foreach (Player player in MainManager.playerList.ToList())
+            {
+                //if (creature.creatureAI.creature.stats.needsUpdating)
+                //{
+                PlayerPacket playerPacket = new PlayerPacket();
+                playerPacket.player = player;
+                playerList.Add(playerPacket);
+                player.needsUpdating = false;
+
+                //}
+            }
+            foreach (int i in deadPlayers)
+            {
+                if (!client.deadCreatureList.Contains(i))
+                {
+                    client.deadPlayersList.Add(i);
+                    packet.deadPlayers.Add(i);
+                }
+            }
+            packet.players = playerList.ToArray();
+            return packet;
+        }
+
+        public static void SyncPlayerFromServer(SyncAllPlayersPacket syncAllPlayersPacket)
+        {
+            List<PlayerPacket> incomingPlayerList = syncAllPlayersPacket.players.ToList<PlayerPacket>();
+            for (int i = 0; incomingPlayerList.Count > i; i++)
+            {
+                int indexToReplace = MainManager.playerList.FindIndex(c => c.id == incomingPlayerList[i].player.id);
+                if (indexToReplace != -1)
+                {
+                    int id = MainManager.playerList[indexToReplace].id;
+                    try
+                    {
+                        Creature oldCreature = MainManager.creatureList[indexToReplace];
+                        MainManager.playerList[indexToReplace] = incomingPlayerList[i].player;
+                        MainManager.playerList[indexToReplace].receivedPacketMove = true;
+                    }
+                    catch (Exception ex) { Printer.LogWarning(ex.ToString()); }
+                }
+                else
+                {
+                    PlayerPacket playerPacket = incomingPlayerList[i];
+                    MainManager.respawnManager.PlayerRespawn(playerPacket.player);
+                }
+            }
         }
     }
 }

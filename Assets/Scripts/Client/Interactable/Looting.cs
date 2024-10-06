@@ -9,7 +9,7 @@ namespace Client
         {
             if (collider.gameObject.CompareTag("Player"))
             {
-                InventoryManager.AddItem(containedItem, MainManager.playerInventory);
+                InventoryManager.AddItem(containedItem, MainManager.mainPlayer.playerInventory);
                 GameObject.Destroy(gameObject);
             }
         }

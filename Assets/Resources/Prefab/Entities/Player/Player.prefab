@@ -317,6 +317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   head: {fileID: 5402690555939012961}
   character: {fileID: 7963597672920464384}
+  isPlayerBusy: 0
 --- !u!1 &7963597672920464384
 GameObject:
   m_ObjectHideFlags: 0
@@ -415,6 +416,7 @@ GameObject:
   - component: {fileID: 1270024091136516942}
   - component: {fileID: 2390399304679558136}
   - component: {fileID: 8870831913541440414}
+  - component: {fileID: 4836859612385180160}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -452,16 +454,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ade329d949e87d54887e9dee71e8b816, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stats:
-    maxHitpoint: 100
-    hitPoint: 100
-    damage: 100
-    baseMovementSpeed: 6
-    movementSpeed: 6
-    maxStamina: 100
-    stamina: 100
-    baseJumpPower: 1
-    jumpPower: 1
+  player:
+    id: 0
+    name: 
+    isMainPlayer: 0
+    stats:
+      currentPosition:
+        x: 0
+        y: 0
+        z: 0
+      currentRotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 0
+      clientPosition:
+        x: 0
+        y: 0
+        z: 0
+      isAlive: 0
+      maxHitpoint: 0
+      hitPoint: 0
+      damage: 0
+      baseMovementSpeed: 0
+      movementSpeed: 0
+      maxStamina: 0
+      stamina: 0
+      baseJumpPower: 0
+      jumpPower: 0
+      immunityFrames: 0
+    playerInventory:
+      content: []
+      id: 0
+    receivedPacketMove: 0
+    receivedPacketDeath: 0
+    needsUpdating: 0
 --- !u!114 &1270024091136516942
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,6 +503,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gravityPower: {x: 0, y: 0, z: 0}
   groundCheck: 0
+  stats:
+    currentPosition:
+      x: 0
+      y: 0
+      z: 0
+    currentRotation:
+      x: 0
+      y: 0
+      z: 0
+      w: 0
+    clientPosition:
+      x: 0
+      y: 0
+      z: 0
+    isAlive: 0
+    maxHitpoint: 0
+    hitPoint: 0
+    damage: 0
+    baseMovementSpeed: 0
+    movementSpeed: 0
+    maxStamina: 0
+    stamina: 0
+    baseJumpPower: 0
+    jumpPower: 0
+    immunityFrames: 0
+  player:
+    id: 0
+    name: 
+    isMainPlayer: 0
+    stats:
+      currentPosition:
+        x: 0
+        y: 0
+        z: 0
+      currentRotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 0
+      clientPosition:
+        x: 0
+        y: 0
+        z: 0
+      isAlive: 0
+      maxHitpoint: 0
+      hitPoint: 0
+      damage: 0
+      baseMovementSpeed: 0
+      movementSpeed: 0
+      maxStamina: 0
+      stamina: 0
+      baseJumpPower: 0
+      jumpPower: 0
+      immunityFrames: 0
+    playerInventory:
+      content: []
+      id: 0
+    receivedPacketMove: 0
+    receivedPacketDeath: 0
+    needsUpdating: 0
   character: {fileID: 8053519372974240140}
   body: {fileID: 7963597672920464384}
 --- !u!143 &2390399304679558136
@@ -527,3 +614,50 @@ CapsuleCollider:
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &4836859612385180160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8053519372974240140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57863ac30c9c2f648a748cc086792eba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player:
+    id: 0
+    name: 
+    isMainPlayer: 0
+    stats:
+      currentPosition:
+        x: 0
+        y: 0
+        z: 0
+      currentRotation:
+        x: 0
+        y: 0
+        z: 0
+        w: 0
+      clientPosition:
+        x: 0
+        y: 0
+        z: 0
+      isAlive: 0
+      maxHitpoint: 0
+      hitPoint: 0
+      damage: 0
+      baseMovementSpeed: 0
+      movementSpeed: 0
+      maxStamina: 0
+      stamina: 0
+      baseJumpPower: 0
+      jumpPower: 0
+      immunityFrames: 0
+    playerInventory:
+      content: []
+      id: 0
+    receivedPacketMove: 0
+    receivedPacketDeath: 0
+    needsUpdating: 0

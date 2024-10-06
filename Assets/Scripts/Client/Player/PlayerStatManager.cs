@@ -1,11 +1,13 @@
 using Shared;
 using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 namespace Client
 {
     public class PlayerStatManager : MonoBehaviour
     {
-        public Stats stats;
+        public Player player;
+        private PlayerStats stats;
         private CreatureStats enemyStats;
         private GameObject enemy;
         private GameObject deadPlayerPrebad;
@@ -22,10 +24,12 @@ namespace Client
 
         private void Start()
         {
+            player = MainManager.mainPlayer;
+            stats = player.stats;
             deadList = GameObject.Find("Dead");
         }
         // Update is called once per frame
-        void Update()
+        public void Update()
         {
             StatsUpdate();
             IsPlayerDead();
@@ -53,9 +57,14 @@ namespace Client
         {
             MainManager.latestPlayerDeadBody = GameObject.Instantiate(deadPlayerPrebad, gameObject.transform.position, Quaternion.identity, deadList.transform);
             MainManager.isPlayerAlive = false;
-            GameObject.Destroy(gameObject);
             Camera camera = MainManager.latestPlayerDeadBody.transform.Find("PlayerDeadCamera").Find("Camera").gameObject.GetComponent<Camera>();
             camera.enabled = true;
+            gameObject.SetActive(false);
+            transform.SetParent(deadList.transform);
+            if (MainManager.IsServer)
+            {
+                StartCoroutine(MainManager.respawnManager.PlayerRespawnCooldown(player));
+            }
         }
 
         public void StatsUpdate()

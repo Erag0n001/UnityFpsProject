@@ -12,7 +12,7 @@ namespace Client
         void Update()
         {
             hitPointBar = gameObject.transform.GetComponent<RectTransform>();
-            hitPointBar.sizeDelta = new Vector2(MainManager.playerStatManager.stats.hitPoint * (400 / MainManager.playerStatManager.stats.maxHitpoint), hitPointBar.rect.height);
+            hitPointBar.sizeDelta = new Vector2(MainManager.mainPlayer.stats.hitPoint * (400 / MainManager.mainPlayer.stats.maxHitpoint), hitPointBar.rect.height);
         }
     }
 }

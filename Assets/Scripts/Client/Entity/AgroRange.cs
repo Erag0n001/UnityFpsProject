@@ -26,7 +26,7 @@ namespace Client
                     if (other.gameObject.CompareTag("Entity") || other.gameObject.CompareTag("Player"))
                     {
                         enemyInRange.Insert(0, other.gameObject);
-                        creatureAI.creature.stats.needsUpdating = true;
+                        creatureAI.creature.needsUpdating = true;
                     }
                 }
             }

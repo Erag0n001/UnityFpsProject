@@ -75,15 +75,15 @@ namespace Client
         {
             if (shouldSendPacket)
             {
-                RequestInventoryFromServer(MainManager.playerInventory);
+                RequestInventoryFromServer(MainManager.mainPlayer.playerInventory);
             }
             if (inventoryInUse[0] == null)
             {
                 inventoryLocation[0].inventoryObject = GameObject.Instantiate(inventoryPrefab);
                 inventoryLocation[0].inventoryObject.transform.SetParent(canvas.transform, false);
-                inventoryInUse[0] = MainManager.playerInventory;
+                inventoryInUse[0] = MainManager.mainPlayer.playerInventory;
                 MainManager.playerCameraControl.UnlockCursor();
-                InventoryUpdate(MainManager.playerInventory, 0);
+                InventoryUpdate(MainManager.mainPlayer.playerInventory, 0);
             }
             else
             {
@@ -96,9 +96,9 @@ namespace Client
         public static void UpdateInventory(Inventory inventory) 
         {
             Inventory inventoryinQueue = inventoryRequestQueue.Dequeue();
-            if(inventoryinQueue == MainManager.playerInventory) 
+            if(inventoryinQueue == MainManager.mainPlayer.playerInventory) 
             {
-                MainManager.playerInventory = inventory;
+                MainManager.mainPlayer.playerInventory = inventory;
                 InventoryUIShowPlayer(false);
                 InventoryUIShowPlayer(false);
                 return;

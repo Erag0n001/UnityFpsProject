@@ -30,7 +30,17 @@ namespace Client
         public static void SyncCreaturesFromServer(Packet packet, Socializing clientt)
         {
             SyncAllCreaturesPacket syncAllCreaturesPacket = Serializer.ConvertBytesToObject<SyncAllCreaturesPacket>(packet.contents);
-            CreatureManager.SyncAllCreaturesFromServer(syncAllCreaturesPacket);
+            CreatureManager.SyncCreaturesFromServer(syncAllCreaturesPacket);
+        }
+        public static void GetPlayerBodyFromServer(Packet packet, Socializing clientt)
+        {
+            SyncAllCreaturesPacket syncAllCreaturesPacket = Serializer.ConvertBytesToObject<SyncAllCreaturesPacket>(packet.contents);
+            CreatureManager.SyncCreaturesFromServer(syncAllCreaturesPacket);
+        }
+        public static void SyncPlayersFromServer(Packet packet, Socializing clientt)
+        {
+            SyncAllPlayersPacket syncAllPlayersPacket = Serializer.ConvertBytesToObject<SyncAllPlayersPacket>(packet.contents);
+            CreatureManager.SyncPlayerFromServer(syncAllPlayersPacket);
         }
         public static void KeepAlivePacket(Packet packet, Socializing client) { }
     }

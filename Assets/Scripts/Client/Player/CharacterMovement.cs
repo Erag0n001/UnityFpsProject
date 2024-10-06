@@ -1,3 +1,5 @@
+using Shared;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 namespace Client
 {
@@ -9,8 +11,9 @@ namespace Client
         private bool isSprinting;
         private bool isCrouching;
         //Stats
+        public PlayerStats stats;
         private PlayerStatManager playerStatManager;
-        private PlayerStatManager.Stats playerStats;
+        public Player player;
         private float lesserGravity;
 
         private CharacterController controller;
@@ -20,6 +23,8 @@ namespace Client
 
         void Start()
         {
+            player = MainManager.mainPlayer;
+            stats = player.stats;
             groundCheck = false;
             lesserGravity = -9;
             gravity = -27;
@@ -29,12 +34,12 @@ namespace Client
         void CalculatePlayerStats()
         {
             playerStatManager = MainManager.playerStatManager;
-            playerStats = playerStatManager.stats;
             controller = character.GetComponent<CharacterController>();
         }
 
         void Update()
         {
+            UpdatePosition();
             MovementPlayer();
             Gravity();
             //apply last
@@ -42,16 +47,15 @@ namespace Client
             if (isSprinting)
             {
                 playerStatManager.AddStamina(-3 * Time.deltaTime);
-                if (playerStats.stamina <= 0)
+                if (stats.stamina <= 0)
                 {
                     isSprinting = false;
-                    playerStatManager.SetMovemendSpeed(playerStats.baseMovementSpeed);
+                    playerStatManager.SetMovemendSpeed(stats.baseMovementSpeed);
                 }
             }
             else
             {
-                //Shit does work
-                if (playerStats.stamina <= 100)
+                if (stats.stamina <= 100)
                 {
                     playerStatManager.AddStamina(1 * Time.deltaTime);
                 }
@@ -60,41 +64,47 @@ namespace Client
 
         public void SprintingDown()
         {
-            playerStatManager.SetMovemendSpeed(playerStats.movementSpeed * 1.25f);
+            playerStatManager.SetMovemendSpeed(stats.movementSpeed * 1.25f);
             isSprinting = true;
         }
 
         public void SprintingUp()
         {
-            playerStatManager.SetMovemendSpeed(playerStats.baseMovementSpeed);
+            playerStatManager.SetMovemendSpeed(stats.baseMovementSpeed);
             isSprinting = false;
             if (isCrouching)
             {
-                playerStatManager.SetMovemendSpeed(playerStats.movementSpeed * 0.5f);
+                playerStatManager.SetMovemendSpeed(stats.movementSpeed * 0.5f);
             }
         }
 
         public void CrouchingDown()
         {
-            playerStatManager.SetMovemendSpeed(playerStats.movementSpeed * 0.5f);
+            playerStatManager.SetMovemendSpeed(stats.movementSpeed * 0.5f);
             isCrouching = true;
         }
 
         public void CrouchingUp()
         {
-            playerStatManager.SetMovemendSpeed(playerStats.baseMovementSpeed);
+            playerStatManager.SetMovemendSpeed(stats.baseMovementSpeed);
             isCrouching = false;
             if (isSprinting)
             {
-                playerStatManager.SetMovemendSpeed(playerStats.movementSpeed * 1.25f);
+                playerStatManager.SetMovemendSpeed(stats.movementSpeed * 1.25f);
             }
         }
 
         void MovementPlayer()
         {
             Vector3 movementVector = body.transform.right * Input.GetAxis("Horizontal") + body.transform.forward * Input.GetAxis("Vertical");
-            movementVector = playerStats.movementSpeed * Time.deltaTime * movementVector;
+            movementVector = stats.movementSpeed * Time.deltaTime * movementVector;
             controller.Move(movementVector);
+        }
+
+        public void Jump()
+        {
+            if (groundCheck)
+                gravityPower.y = Mathf.Sqrt(stats.jumpPower * -2f * gravity);
         }
 
         void Gravity()
@@ -109,15 +119,23 @@ namespace Client
             }
         }
 
-        public void Jump()
-        {
-            if (groundCheck)
-                gravityPower.y = Mathf.Sqrt(playerStats.jumpPower * -2f * gravity);
-        }
-
         void ApplyGravity()
         {
             controller.Move(gravityPower * Time.deltaTime);
+        }
+
+        public void HardSyncPlayerMovement() 
+        {
+            Vector3 currentPos = Converter.Vector3ToUnityVector3(player.stats.currentPosition);
+            if (Vector3.Distance(transform.position, currentPos) > 30) 
+            {
+                transform.position = currentPos;
+            }
+        }
+
+        public void UpdatePosition()
+        {
+            player.stats.clientPosition =Converter.Vector3UnityToVector3(transform.position);
         }
     }
 }

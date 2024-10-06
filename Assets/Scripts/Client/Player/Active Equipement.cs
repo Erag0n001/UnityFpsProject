@@ -6,7 +6,7 @@ namespace Client
         public Transform[] activeEquipementList;
         public GameObject[] equippedEquipementList;
         private KeyCode[] keys;
-        void Start()
+        public void Start()
         {
             GameObject equipement = GameObject.Find("ActiveEquipement");
             activeEquipementList = equipement.GetComponentsInChildren<Transform>(true);
@@ -23,7 +23,7 @@ namespace Client
         }
 
         // Update is called once per frame
-        void Update()
+        public void Update()
         {
             for (int i = 0; i < keys.Length; i++)
             {

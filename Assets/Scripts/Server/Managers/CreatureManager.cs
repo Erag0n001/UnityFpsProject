@@ -18,6 +18,7 @@ namespace Server
                     {
                         syncAllCreaturesPacket = Client.CreatureManager.SyncCreaturesWithClient(gameClient);
                         gameClient.socializing.AddToQueue(new Packet("SyncCreaturesFromServer", syncAllCreaturesPacket));
+
                     }
                     Thread.Sleep(250);
                 }

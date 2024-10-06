@@ -12,6 +12,10 @@ namespace Shared
         public string uniqueName;
         public CreatureStats stats = new CreatureStats();
         [NonSerialized] public CreatureAI creatureAI;
+
+        public bool receivedPacketMove;
+        public bool receivedPacketDeath;
+        public bool needsUpdating;
     }
 
     [Serializable]
@@ -43,10 +47,6 @@ namespace Shared
         [NonSerialized] public SphereCollider agroRangeCollider = null;
 
         [NonSerialized] public float immunityFrames;
-
-        public bool receivedPacketMove;
-        public bool receivedPacketDeath;
-        public bool needsUpdating;
     }
     [Serializable]
     public class CreatureBase

@@ -89,24 +89,24 @@ namespace Client
         {
             if(Vector3.Distance(transform.position,lastPos) > 0.1f) 
             {
-                creature.stats.needsUpdating = true;
+                creature.needsUpdating = true;
             }
             if(Quaternion.Angle(transform.rotation,lastRot) > 1) 
             {
-                creature.stats.needsUpdating = true;
+                creature.needsUpdating = true;
             }
             lastPos = transform.position;
             lastRot = transform.rotation;
         }
         public void ClientTick() 
         {
-            if (creature.stats.receivedPacketMove)
+            if (creature.receivedPacketDeath)
             {
-                creature.stats.receivedPacketMove = false;
+                creature.receivedPacketDeath = false;
                 StartCoroutine(Lerp(Converter.Vector3ToUnityVector3(creature.stats.currentPosition)));
                 StartCoroutine(LerpRot(Converter.Vector4ToQuaternion(creature.stats.currentRotation)));
             }
-            if (creature.stats.receivedPacketDeath) 
+            if (creature.receivedPacketDeath) 
             {
                 DestroyCreature();
             }
@@ -184,33 +184,6 @@ namespace Client
             pathFinding.SetDestination(Converter.Vector3ToUnityVector3(creature.stats.wanderingPos));
         }
 
-        public IEnumerator LerpRot(Quaternion rotation) 
-        {
-            Quaternion startRot = transform.rotation;
-
-            float currentTime = 0f;
-            float endTime = 0.250f;
-            while (currentTime < endTime)
-            {
-                currentTime += Time.deltaTime;
-                transform.rotation = Quaternion.Lerp(startRot, rotation, currentTime / endTime);
-                yield return null;
-            }
-            transform.rotation = rotation;
-        }
-        public IEnumerator Lerp(Vector3 v) 
-        {
-            float currentTime = 0f;
-            float endTime = 0.250f;
-            Vector3 startPos = gameObject.transform.position;
-            while (currentTime < endTime) 
-            {
-                currentTime += Time.deltaTime;
-                transform.position = Vector3.Lerp(startPos, v, currentTime / endTime);
-                yield return null;
-            }
-            transform.position = v;
-        }
         //Passive
         void Flee()
         {
@@ -279,7 +252,7 @@ namespace Client
             {
                 creature.stats.isAttackerPlayer = true;
                 creature.stats.attacker = other.gameObject;
-                PlayerStatManager.Stats enemyStats = creature.stats.attacker.GetComponent<PlayerStatManager>().stats;
+                PlayerStats enemyStats = creature.stats.attacker.GetComponent<PlayerData>().player.stats;
                 if (enemyStats.damage != 0)
                 {
                     AddHP(enemyStats.damage * -1);
@@ -292,6 +265,35 @@ namespace Client
                 CreatureStats enemyStats = creature.stats.attacker.GetComponent<CreatureAI>().creature.stats;
                 AddHP(enemyStats.damage * -1);
             }
+        }
+
+        // Sync across the Network
+        public IEnumerator LerpRot(Quaternion rotation)
+        {
+            Quaternion startRot = transform.rotation;
+
+            float currentTime = 0f;
+            float endTime = 0.250f;
+            while (currentTime < endTime)
+            {
+                currentTime += Time.deltaTime;
+                transform.rotation = Quaternion.Lerp(startRot, rotation, currentTime / endTime);
+                yield return null;
+            }
+            transform.rotation = rotation;
+        }
+        public IEnumerator Lerp(Vector3 v)
+        {
+            float currentTime = 0f;
+            float endTime = 0.250f;
+            Vector3 startPos = gameObject.transform.position;
+            while (currentTime < endTime)
+            {
+                currentTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(startPos, v, currentTime / endTime);
+                yield return null;
+            }
+            transform.position = v;
         }
     }
 }
